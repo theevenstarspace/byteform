@@ -63,7 +63,7 @@ describe("BufferWriter", () => {
   it("begin should reset the position", () => {
     const writer = new BufferWriter(16);
     writer.writeUint8(42);
-    writer.begin();
+    writer.reset();
     expect(writer.position).toBe(0);
   });
 
@@ -101,7 +101,7 @@ describe("BufferWriter", () => {
     const writer = new BufferWriter(16);
     expect(() => writer.writeUint8(42)).not.toThrow();
 
-    writer.begin();
+    writer.reset();
     writer.writeBytes(new Uint8Array(16));
 
     expect(() => writer.writeUint8(42)).toThrow(RangeError);
@@ -111,7 +111,7 @@ describe("BufferWriter", () => {
     const writer = new BufferWriter(8, { maxByteLength: 16 });
     expect(() => writer.writeBytes(new Uint8Array(16))).not.toThrow();
 
-    writer.begin();
+    writer.reset();
     writer.writeBytes(new Uint8Array(16));
 
     expect(() => writer.writeUint8(42)).toThrow(RangeError);

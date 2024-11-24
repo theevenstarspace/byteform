@@ -81,7 +81,7 @@ export class BufferWriter extends BufferView {
     return this._buffer.byteLength - this._offset;
   }
 
-  public begin(): void {
+  public reset(): void {
     this._offset = 0;
   }
 

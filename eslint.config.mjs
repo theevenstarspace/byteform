@@ -17,5 +17,6 @@ export default tseslint.config({
     "@typescript-eslint/explicit-member-accessibility": "error",
 
     semi: "error",
+    indent: ["error", 2]
   },
 });
