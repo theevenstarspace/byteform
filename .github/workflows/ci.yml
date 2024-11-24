@@ -1,0 +1,29 @@
+name: Byteform CI
+
+on:
+  push:
+    branches:
+      - main # Run this workflow on pushes to the main branch
+  pull_request:
+    branches:
+      - main # Run this workflow on pull requests targeting the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Check out the repository code
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*' # Use the latest LTS version of Node.js
+          cache: 'yarn'         # Cache Yarn dependencies
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build project
+        run: yarn build
