@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "downlevelIteration": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "target": "ES2020",
+    "lib": ["ESNext", "DOM"],
+    "useUnknownInCatchVariables": false,
+    "types": ["jest", "node"]
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
