@@ -32,9 +32,7 @@ export class BinaryEncoder {
   }
 
   /**
-   * Creates a new binary encoder from an ArrayBuffer.
-   * @param buffer - The ArrayBuffer to encode
-   * @returns The new binary encoder instance
+   * Resets the buffer writer.
    */
   public reset(): void {
     this.writer.reset();
@@ -51,7 +49,7 @@ export class BinaryEncoder {
   }
 
   /**
-   * Commits the buffer.
+   * Commits the buffer as an ArrayBuffer.
    * @returns The ArrayBuffer containing the encoded data
    */
   public commit(): ArrayBuffer {
@@ -59,7 +57,7 @@ export class BinaryEncoder {
   }
 
   /**
-   * Commits the buffer as a Uint8Array.
+   * Commits the buffer as an Uint8Array.
    * @returns The Uint8Array containing the encoded data
    */
   public commitUint8Array(): Uint8Array {
