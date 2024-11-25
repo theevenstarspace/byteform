@@ -5,8 +5,16 @@ import { dts } from "rollup-plugin-dts";
 // Workaround for - Error: No ESLint configuration found in "byteform\src".
 import eslint from "./utils/eslint.plugin.mjs";
 
+import pkg from "./package.json" with { type: "json" };
+
 const tsconfig = "./tsconfig.json";
 const include = ["src/**/*.ts"];
+
+const banner = `/**
+ * Byteform v${pkg.version}
+ * Copyright ${new Date().getFullYear()} ${pkg.author}
+ * @license MIT
+ */`;
 
 /** @type {import('rollup').RollupOptions[]} **/
 export default [
@@ -28,7 +36,7 @@ export default [
     plugins: [
       eslint(),
       typescript({ tsconfig, include }),
-      terser({ format: { comments: false } }),
+      terser({ format: { comments: false, preamble: banner } }),
     ],
   },
   {
