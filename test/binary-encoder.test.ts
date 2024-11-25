@@ -45,4 +45,11 @@ describe("BinaryEncoder", () => {
     expect(encoder.writer.buffer.maxByteLength).toBe(64);
   });
 
+  it("should resize the underlying buffer", () => {
+    const encoder = BinaryEncoder.create(16, { maxByteLength: 32 });
+    encoder.encode(new List(u32), [1, 2, 3, 4, 5]); // 20 bytes
+
+    expect(encoder.writer.capacity).toBe(32);
+  });
+
 });
