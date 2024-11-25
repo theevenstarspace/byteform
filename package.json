@@ -1,6 +1,6 @@
 {
   "name": "byteform",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "Library for encoding and decoding binary data.",
   "type": "module",
   "main": "dist/cjs/index.cjs",
