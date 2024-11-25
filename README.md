@@ -28,12 +28,12 @@ Byteform simplifies binary data handling by providing an intuitive API without s
 
 Install Byteform via npm:
 ```bash
-npm install byteform
+npm install @evenstar/byteform
 ```
 
 Or via yarn:
 ```bash
-yarn add byteform
+yarn add @evenstar/byteform
 ```
 
 ## Quick Start
@@ -41,7 +41,7 @@ yarn add byteform
 ### Create a Binary Structure
 
 ```typescript
-import { Struct, u8, u16, u32, f32, f64 } from 'byteform';
+import { Struct, u8, u16, u32, f32, f64 } from '@evenstar/byteform';
 
 const vec3 = new Struct({
   x: f32,
@@ -66,7 +66,7 @@ const Player = new Struct({
 ### Encode data
 
 ```typescript
-import { BinaryEncoder } from 'byteform';
+import { BinaryEncoder } from '@evenstar/byteform';
 
 const encoder = BinaryEncoder.create(1024); // 1KB buffer
 
@@ -99,7 +99,7 @@ const buffer = encoder.commit();
 ### Decode data
 
 ```typescript
-import { BinaryDecoder } from 'byteform';
+import { BinaryDecoder } from '@evenstar/byteform';
 
 const decoder = BinaryDecoder.fromArrayBuffer(buffer);
 const player = decoder.decode(Player);
