@@ -16,6 +16,8 @@ export default tseslint.config({
     "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/explicit-member-accessibility": "error",
 
+    "@typescript-eslint/explicit-function-return-type": "error",
+
     semi: "error",
     indent: ["error", 2]
   },
