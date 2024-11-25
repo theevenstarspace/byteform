@@ -68,7 +68,7 @@ const Player = new Struct({
 ```typescript
 import { BinaryEncoder } from 'byteform';
 
-const encoder = new BinaryEncoder(1024); // 1KB buffer
+const encoder = BinaryEncoder.create(1024); // 1KB buffer
 
 // Encode a Player instance
 encoder.encode(Player, {
