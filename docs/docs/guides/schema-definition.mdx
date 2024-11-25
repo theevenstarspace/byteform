@@ -1,0 +1,234 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Schema Definition
+
+Binary data encoding/decoding in Byteform is done using schemas. A schema is a set of rules that define how data is encoded and decoded. Schemas are defined using a simple, human-readable syntax:
+
+```typescript
+import { Struct, List, Text, f32, u8 } from '@evenstar/byteform';
+
+const schema = new Struct({
+  name: new Text(32), // Max 32 bytes
+  age: u8, // Unsigned 8-bit integer, e.g. number between 0 and 255
+  scores: new List(f32), // List of 32-bit floating point numbers
+});
+```
+
+In the example above, we define a schema with three fields: name, age, and scores.
+
+:::info
+As you might have noticed, some types are defined using a constructor function, while others are defined using a shorthand. This is because some field types have additional configuration options that can be passed to the constructor.
+
+However, looking ahead, constructable types start with the Uppercase letter, while shorthand types start with the lowercase letter.
+:::
+
+Byteform provides a set of built-in types that can be used to define schemas. We will cover the different types and their configuration options in the following sections.
+
+***
+
+## Struct
+
+[Struct](/api/classes/Struct.md) is a collection of fields. It's a synonym for a JavaScript object.
+
+It is used to group multiple fields together. A struct can contain any number of fields of any type.
+
+The constructor takes an object as an argument, where each key-value pair represents a field in the struct. There are a few examples of how to define a struct:
+
+<Tabs>
+  <TabItem value="simple" label="Simple" default>
+    ```typescript
+    import { Struct, Text, u8 } from '@evenstar/byteform';
+
+    /**
+     * Define a schema with two fields: name and age.
+     * Similar to JavaScript object: { name: 'Alice', age: 25 }
+     */
+    const schema = new Struct({
+      name: new Text(32), // Max 32 bytes string
+      age: u8, // Unsigned 8-bit integer, e.g. number between 0 and 255
+    });
+    ```
+  </TabItem>
+  <TabItem value="nested" label="Nested">
+    ```typescript
+    import { Struct, Text, u8 } from '@evenstar/byteform';
+
+    /**
+     * Define a schema with three fields: name, age, and address.
+     * Similar to JavaScript object:
+     * { 
+     *    name: 'Alice',
+     *    age: 25,
+     *    address: {
+     *      street: '123 Main St',
+     *      city: 'New York',
+     *      zip: '10001' 
+     *    }
+     *  }
+     */
+    const schema = new Struct({
+      name: new Text(32), // Max 32 bytes string
+      age: u8, // Unsigned 8-bit integer, e.g. number between 0 and 255
+      address: new Struct({ // Nested struct
+        street: new Text(64), // Max 64 bytes string
+        city: new Text(32), // Max 32 bytes string
+        zip: new Text(10), // Max 10 bytes string
+      }),
+    });
+    ```
+  </TabItem>
+  <TabItem value="typescript" label="With TypeScript">
+    ```typescript
+    import { Struct, Text } from '@evenstar/byteform';
+
+    // Define a TypeScript type
+    type Person = {
+      name: string;
+      age: number;
+    };
+
+    /**
+     * Validate the schema against the TypeScript type.
+     * If the schema definition does not match the TypeScript type, a type error will be thrown.
+     */
+    const schema = new Struct<Person>({
+      name: new Text(32),
+      age: new Text(32) // TypeError: age should have a type that implements number encoding/decoding.
+    });
+    ```
+  </TabItem>
+</Tabs>
+
+***
+
+## List
+
+[List](/api/classes/List.md) is a collection of elements of the same type. It's a synonym for a JavaScript array.
+
+Like a struct, list is used to group multiple elements together. A list can contain any number of elements.
+
+The constructor takes a single argument, which is the type of elements in the list. There are a few examples of how to define a list:
+
+<Tabs>
+  <TabItem value="simple" label="Simple" default>
+    ```typescript
+    import { List, u8 } from '@evenstar/byteform';
+
+    /**
+     * Define a schema with a list of unsigned 8-bit integers.
+     * Similar to JavaScript array: [0, 1, 2, 3, 4]
+     */
+    const schema = new List(u8); // Unsigned 8-bit integer, e.g. number between 0 and 255
+    ```
+  </TabItem>
+  <TabItem value="nested" label="Nested">
+    ```typescript
+    import { List, u8 } from '@evenstar/byteform';
+
+    /**
+     * Define a schema with a nested list of unsigned 8-bit integers.
+     * Similar to JavaScript array: [[0, 1, 2], [3, 4, 5]]
+     */
+    const schema = new List(new List(u8)); // Nested list of unsigned 8-bit integers
+    ```
+  </TabItem>
+  <TabItem value="typescript" label="With TypeScript">
+    ```typescript
+    import { List, u8 } from '@evenstar/byteform';
+
+    /**
+     * Validate the schema against the TypeScript type.
+     * If the schema definition does not match the TypeScript type, a type error will be thrown.
+     */
+    const names = new List<string>(u8); // TypeError: List data type should implement string encoding/decoding.
+    ```
+  </TabItem>
+</Tabs>
+
+***
+
+## Text
+
+[Text](/api/classes/Text.md) is a string of characters. It's a synonym for a JavaScript string.
+
+Text is used to represent strings of characters. Text has a maximum length.
+
+The constructor takes a single argument, which is the maximum byte length of the text.
+
+```typescript
+import { Text } from '@evenstar/byteform';
+
+const schema = new Text(32);
+```
+
+### Max Byte Length
+
+For performance reasons, Text type was designed to have a maximum byte length. If you try to encode a string that exceeds the maximum byte length, an error will be thrown.
+
+You are allowed to encode a string that is shorter than the maximum byte length. In this case, only written bytes will be used.
+
+You can also set the maximum byte length manually by providing it as a first argument to the constructor.
+
+```typescript
+import { Text } from '@evenstar/byteform';
+
+const schema = new Text(4098); // Max 4KB
+```
+
+You can read [here](https://developer.mozilla.org/docs/Web/API/TextEncoder/encodeInto#buffer_sizing) about how to determine the maximum byte length for a given string.
+
+### text
+
+Byteform also provides a shorthand for `new Text(256)`.
+
+```typescript
+import { text } from '@evenstar/byteform';
+
+const schema = text;
+```
+
+***
+
+## Number Types
+
+Byteform provides an extensive set of number types.
+
+### Shortcuts
+
+|Type |Description                              |Size in bytes|Value Range              |
+|-----|-----------------------------------------|-------------|-------------------------|
+|u8   |Unsigned 8-bit integer                   |1            |0 to 255                 |
+|u16  |Unsigned 16-bit big-endian integer       |2            |0 to 65535               |
+|u32  |Unsigned 32-bit big-endian integer       |4            |0 to 4294967295          |
+|u64  |Unsigned 64-bit big-endian integer       |8            |0 to 2^264 - 1           |
+|i8   |Signed 8-bit integer                     |1            |-128 to 127              |
+|i16  |Signed 16-bit big-endian integer         |2            |-32768 to 32767          |
+|i32  |Signed 32-bit big-endian integer         |4            |-2147483648 to 2147483647|
+|i64  |Signed 64-bit big-endian integer         |8            |-2^63 to 2^63 - 1        |
+|f32  |32-bit floating point big-endian number  |4            |-3.4e38 to 3.4e38        |
+|f64  |64-bit floating point big-endian number  |8            |-1.8e308 to 1.8e308      |
+
+### Endianness
+
+There are also endian-specific versions of the number types:
+
+|Type  |Description              |Endianness   |
+|------|-------------------------|-------------|
+|u16le |Unsigned 16-bit integer  |little-endian|
+|u16be |Unsigned 16-bit integer  |big-endian   |
+|u32le |Unsigned 32-bit integer  |little-endian|
+|u32be |Unsigned 32-bit integer  |big-endian   |
+|u64le |Unsigned 64-bit integer  |little-endian|
+|u64be |Unsigned 64-bit integer  |big-endian   |
+|i16le |Signed 16-bit integer    |little-endian|
+|i16be |Signed 16-bit integer    |big-endian   |
+|i32le |Signed 32-bit integer    |little-endian|
+|i32be |Signed 32-bit integer    |big-endian   |
+|i64le |Signed 64-bit integer    |little-endian|
+|i64be |Signed 64-bit integer    |big-endian   |
+|f32le |32-bit floating point    |little-endian|
+|f32be |32-bit floating point    |big-endian   |
+|f64le |64-bit floating point    |little-endian|
+|f64be |64-bit floating point    |big-endian   |
+

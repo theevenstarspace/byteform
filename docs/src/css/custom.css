@@ -1,0 +1,233 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #1976d2;
+  --ifm-color-primary-dark: #176abd;
+  --ifm-color-primary-darker: #1564b3;
+  --ifm-color-primary-darkest: #115393;
+  --ifm-color-primary-light: #1a7cdc;
+  --ifm-color-primary-lighter: #1e82e4;
+  --ifm-color-primary-lightest: #2988e5;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  --ifm-navbar-background-color: rgb(255, 255, 255, 0.5);
+  --ifm-background-color: rgb(255, 255, 255);
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #03a9f4;
+  --ifm-color-primary-dark: #03a1e8;
+  --ifm-color-primary-darker: #0398dc;
+  --ifm-color-primary-darkest: #0390cf;
+  --ifm-color-primary-light: #14b4fc;
+  --ifm-color-primary-lighter: #20b8fc;
+  --ifm-color-primary-lightest: #44c3fd;
+
+  /* --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf; */
+
+  --ifm-navbar-background-color: rgb(20, 20, 24, 0.75);
+  --ifm-background-color: #141418!important;
+
+  --ifm-toc-border-color: rgba(255, 255, 255, 0.1)!important;
+  /* --ifm-toc-border-color: #36363f!important; */
+
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+  --ifm-global-shadow-lw: 0 1px 2px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* @media screen and (max-width: 996px) {
+  :root {
+    --ifm-navbar-background-color: rgb(255, 255, 255, 1.0);
+  }
+
+  [data-theme='dark'] {
+    --ifm-navbar-background-color: rgb(20, 20, 24, 1.0);
+  }
+} */
+
+html {
+  scroll-behavior: smooth;
+}
+
+[data-theme='dark'] .theme-doc-sidebar-container {
+  border-right: none;
+}
+
+[data-theme='dark'] nav.thin-scrollbar {
+  border-right: 1px solid var(--ifm-toc-border-color);
+}
+
+nav.navbar {
+  backdrop-filter: blur(6px);
+}
+
+[data-theme='dark'] nav.navbar {
+  backdrop-filter: blur(6px);
+}
+
+@media screen and (max-width: 996px) {
+  :root {
+    --ifm-navbar-background-color: rgb(255, 255, 255, 1.0);
+  }
+
+  [data-theme='dark'] {
+    --ifm-navbar-background-color: rgb(20, 20, 24, 1.0);
+  }
+
+  nav.navbar {
+    backdrop-filter: unset!important;
+  }
+}
+
+[data-theme='dark'] .theme-doc-toc-mobile,
+[data-theme='dark'] .card {
+  background-color: #212128;
+}
+
+.hero-feature--list {
+  gap: 2rem 0;
+}
+
+.hero-feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* padding-bottom: 2rem; */
+}
+
+.hero-feature__description {
+  max-width: 480px;
+  /* max-width: 386px; */
+}
+
+
+.hero__title {
+  font-size: 6rem!important;
+  /* color: var(--ifm-font-color-base); */
+}
+
+.hero__title,
+.hero__subtitle {
+  color: #141418;
+}
+
+@media screen and (max-width: 486px) {
+  .hero__title {
+    font-size: 4rem!important;
+  }
+}
+
+
+
+
+
+.waves {
+  position:absolute;
+  width: 100%;
+  height: 15vh;
+
+  bottom: 0;
+  left: 0;
+
+  /*Fix for safari gap*/
+  /* margin-bottom:-7px; */
+
+  min-height:100px;
+  max-height:150px;
+}
+
+header.hero {
+  padding: 4rem 0 16vh 0;
+
+  
+  /* background: linear-gradient(-225deg, #A8BFFF 0%, #884D80 100%); */
+  background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+
+  /* background: url('/textures/dark/texture_08.png');
+  background-size: 10%; */
+}
+
+[data-theme='dark'] header.hero {
+  background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+
+  /* background: url('/textures/light/texture_07.png');
+  background-size: 10%; */
+}
+
+header.hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Animation */
+
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+
+  fill: rgba(255, 255, 255, 0.7);
+}
+
+[data-theme='dark'] .parallax > use:nth-child(1) {
+  fill: rgba(20, 20, 24, 0.7);
+}
+
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+
+  fill: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme='dark'] .parallax > use:nth-child(2) {
+  fill: rgba(20, 20, 24, 0.5);
+}
+
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+
+  fill: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme='dark'] .parallax > use:nth-child(3) {
+  fill: rgba(20, 20, 24, 0.3);
+}
+
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+
+  fill: rgba(255, 255, 255, 1.0);
+}
+
+[data-theme='dark'] .parallax > use:nth-child(4) {
+  fill: rgba(20, 20, 24, 1.0);
+}
+
+@keyframes move-forever {
+  0% {
+   transform: translate3d(-90px,0,0);
+  }
+  100% { 
+    transform: translate3d(85px,0,0);
+  }
+}
