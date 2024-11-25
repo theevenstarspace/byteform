@@ -47,7 +47,7 @@ const typeDocsOptions: Partial<DocsOptions> = {
 const config: Config = {
   title: 'Byteform',
   tagline: 'Encode and decode binary data with ease.',
-  // favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
   url: 'https://byteform.netlify.app',
@@ -113,10 +113,10 @@ const config: Config = {
     // image: 'img/docusaurus-social-card.jpg',
     navbar: {
       title: 'Byteform',
-      // logo: {
-      //   alt: 'My Site Logo',
-      //   src: 'img/logo.svg',
-      // },
+      logo: {
+        alt: 'Byteform Logo',
+        src: 'img/logo.png',
+      },
       items: [
         {
           type: 'docSidebar',
