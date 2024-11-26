@@ -1,7 +1,15 @@
 {
   "name": "@evenstar/byteform",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Library for encoding and decoding binary data.",
+  "keywords": [
+    "binary",
+    "encode",
+    "decode",
+    "parse",
+    "serialize",
+    "protocol"
+  ],
   "type": "module",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",

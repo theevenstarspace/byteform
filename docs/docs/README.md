@@ -45,7 +45,7 @@ yarn add @evenstar/byteform
 ### Create a Binary Structure
 
 ```typescript
-import { Struct, u8, u16, u32, f32, f64 } from '@evenstar/byteform';
+import { Struct, List, Text, u8, f32 } from '@evenstar/byteform';
 
 const vec3 = new Struct({
   x: f32,
