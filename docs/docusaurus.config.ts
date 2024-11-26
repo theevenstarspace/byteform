@@ -1,10 +1,11 @@
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config, PluginConfig } from '@docusaurus/types';
+import type { Config, Plugin, PluginConfig } from '@docusaurus/types';
 import type { TypeDocOptions } from 'typedoc';
 import type { PluginOptions } from 'typedoc-plugin-markdown';
 import type * as Preset from '@docusaurus/preset-classic';
+import copyReadme from './scripts/copyReadme';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -69,7 +70,18 @@ const config: Config = {
   },
 
   plugins: [
-    require.resolve('docusaurus-lunr-search'),
+    (): Plugin => ({
+      name: 'copy-readme-plugin',
+      async loadContent(): Promise<void> {
+        await copyReadme();
+      },
+    }),
+    [
+      require.resolve("docusaurus-plugin-search-local"),
+      {
+        indexBlog: false
+      },
+    ],
     [
       'docusaurus-plugin-typedoc',
       typeDocsOptions,
