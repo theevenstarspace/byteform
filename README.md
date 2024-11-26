@@ -1,5 +1,9 @@
 # Byteform
 
+![GitHub branch check runs](https://img.shields.io/github/check-runs/theevenstarspace/byteform/main?style=flat)
+![npm package minimized gzipped size (scoped)](https://img.shields.io/bundlejs/size/%40evenstar/byteform?style=flat)
+![NPM Version](https://img.shields.io/npm/v/%40evenstar%2Fbyteform?style=flat)
+
 **Byteform** is a lightweight and versatile TypeScript library designed for encoding and decoding binary data. It provides an intuitive API to work with binary structures, making it an excellent choice for developers dealing with low-level data operations in both browser and Node.js environments.
 
 ## Table of contents
@@ -50,8 +54,8 @@ const vec3 = new Struct({
 });
 
 const bullet = new Struct({
-  position: Vec3,
-  velocity: Vec3,
+  position: vec3,
+  velocity: vec3,
   damage: u8
 });
 

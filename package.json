@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/theevenstarspace/byteform/issues"
   },
-  "homepage": "https://github.com/theevenstarspace/byteform",
+  "homepage": "https://byteform.js.org",
   "packageManager": "yarn@1.22.22",
   "devDependencies": {
     "@eslint/js": "^9.15.0",
