@@ -72,11 +72,11 @@ const config: Config = {
   plugins: [
     (): Plugin => ({
       name: 'copy-assets-plugin',
-      async loadContent(): Promise<void> {
-        await copyFile('../README.md', 'docs/README.md');
+      loadContent(): void {
+        copyFile('../README.md', 'docs/README.md');
 
-        await throwIfNoContent('../benchmark/results');
-        await copyFile('../benchmark/results', 'benchmarks');
+        throwIfNoContent('../benchmark/results');
+        copyFile('../benchmark/results', 'benchmarks');
       },
     }),
     [
