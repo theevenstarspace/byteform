@@ -1,11 +1,11 @@
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { themes as prismThemes } from 'prism-react-renderer';
+import { copyFile, throwIfNoContent } from './scripts/copy';
 import type { Config, Plugin, PluginConfig } from '@docusaurus/types';
 import type { TypeDocOptions } from 'typedoc';
 import type { PluginOptions } from 'typedoc-plugin-markdown';
 import type * as Preset from '@docusaurus/preset-classic';
-import copyReadme from './scripts/copyReadme';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -71,9 +71,12 @@ const config: Config = {
 
   plugins: [
     (): Plugin => ({
-      name: 'copy-readme-plugin',
+      name: 'copy-assets-plugin',
       async loadContent(): Promise<void> {
-        await copyReadme();
+        await copyFile('../README.md', 'docs/README.md');
+
+        await throwIfNoContent('../benchmark/results');
+        await copyFile('../benchmark/results', 'benchmarks');
       },
     }),
     [

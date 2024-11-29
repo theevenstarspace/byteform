@@ -52,6 +52,11 @@
   --ifm-global-shadow-lw: 0 1px 2px 0 rgba(255, 255, 255, 0.1);
 }
 
+/* [data-theme='dark'] details {
+  --ifm-alert-background-color: #141418!important;
+  --ifm-alert-border-color: var(--ifm-color-primary)!important;
+} */
+
 /* @media screen and (max-width: 996px) {
   :root {
     --ifm-navbar-background-color: rgb(255, 255, 255, 1.0);

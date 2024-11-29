@@ -1,0 +1,69 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import BenchmarkBarChart from '/src/components/BenchmarkBarChart';
+import { getDefinedInUrl } from '/src/getDefinedInUrl';
+
+import encodingDataset from '/benchmarks/player-encoding.json';
+import decodingDataset from '/benchmarks/player-decoding.json';
+
+# Byteform
+
+Here are the benchmarks for Byteform compared to other serialization libraries.
+
+Values are in `operations per second`. Higher is better.
+
+Benchmarks are run on a `13th Gen Intel(R) Core(TM) i7-13620H   2.40 GHz` and `16 GB` of RAM.
+
+<details>
+  <summary>Task description</summary>
+
+  Main tasks are encoding and decoding a player object with the following structure:
+
+  ```typescript
+  interface Vector3 {
+    x: number;
+    y: number;
+    z: number;
+  }
+
+  interface Bullet {
+    position: Vector3;
+    velocity: Vector3;
+  }
+
+  interface Player {
+    name: string;
+    position: Vector3;
+    rotation: number;
+    bullets: Bullet[];
+  }
+  ```
+</details>
+
+## Encoding
+
+<BenchmarkBarChart data={encodingDataset} />
+
+<details>
+  <summary>Source code</summary>
+
+  - Byteform benchmark <a href={getDefinedInUrl('/benchmark/src/player-encoding.ts', 12, 47)}>source</a>
+  - JSON benchmark <a href={getDefinedInUrl('/benchmark/src/player-encoding.ts', 49, 60)}>source</a>
+  - Msgpack-lite benchmark <a href={getDefinedInUrl('/benchmark/src/player-encoding.ts', 62, 73)}>source</a>
+  - Flatbuffers benchmark <a href={getDefinedInUrl('/benchmark/src/flatbuffers/encode.ts', 6, 37)}>source</a>
+  - BSON benchmark <a href={getDefinedInUrl('/benchmark/src/player-encoding.ts', 77, 88)}>source</a>
+</details>
+
+## Decoding
+
+<BenchmarkBarChart data={decodingDataset} />
+
+<details>
+  <summary>Source code</summary>
+  
+  - Byteform benchmark <a href={getDefinedInUrl('/benchmark/src/player-decoding.ts', 13, 50)}>source</a>
+  - JSON benchmark <a href={getDefinedInUrl('/benchmark/src/player-decoding.ts', 52, 69)}>source</a>
+  - Msgpack-lite benchmark <a href={getDefinedInUrl('/benchmark/src/player-decoding.ts', 71, 88)}>source</a>
+  - Flatbuffers benchmark <a href={getDefinedInUrl('/benchmark/src/flatbuffers/decode.ts', 5, 46)}>source</a>
+  - BSON benchmark <a href={getDefinedInUrl('/benchmark/src/player-decoding.ts', 98, 115)}>source</a>
+</details>

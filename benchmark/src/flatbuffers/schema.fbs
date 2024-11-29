@@ -1,0 +1,19 @@
+struct Vec3 (csharp_partial) {
+    x:float (id:0);
+    y:float (id:1);
+    z:float (id:2);
+}
+
+table Bullet (csharp_partial) {
+    position:Vec3 (id:0);
+    velocity:Vec3 (id:1);
+}
+
+table Player (csharp_partial) {
+    name:string (id:0);
+    position:Vec3 (id:1);
+    rotation:float (id:2);
+    bullets:[Bullet] (id:3);
+}
+
+root_type Player;
