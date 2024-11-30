@@ -4,7 +4,7 @@ import { BSON } from 'bson';
 import { BinaryEncoder, f32, List, Struct, text } from '@evenstar/byteform';
 import { getOptions } from './utils';
 import type { Summary } from 'benny/lib/internal/common-types';
-import { encodePlayerFlatbuffer } from './flatbuffers/enocde';
+import { encodePlayerFlatbuffer } from './flatbuffers/encode';
 
 export const PlayerEncoding = (): Promise<Summary> => benny.suite(
   'Player encoding',
