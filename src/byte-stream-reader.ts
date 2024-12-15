@@ -3,7 +3,7 @@ import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
 /**
  * A class that provides methods to read data from a buffer.
- * @group Decoding
+ * @group Streams
  */
 export class ByteStreamReader extends ByteStream {
   /**

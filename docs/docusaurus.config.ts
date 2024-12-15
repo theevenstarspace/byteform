@@ -23,7 +23,7 @@ const typeDocsOptions: Partial<DocsOptions> = {
   readme: 'none',
 
   sort: ['source-order'],
-  groupOrder: ['Encoding', 'Decoding', 'Types', 'Available Types', 'Helpers', 'Other'],
+  groupOrder: ['Streams', 'Types', 'Available Types', 'Helpers', 'Other'],
 
   expandParameters: true,
 

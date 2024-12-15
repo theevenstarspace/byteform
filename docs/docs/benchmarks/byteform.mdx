@@ -3,8 +3,8 @@ import TabItem from '@theme/TabItem';
 import BenchmarkBarChart from '/src/components/BenchmarkBarChart';
 import { getDefinedInUrl } from '/src/getDefinedInUrl';
 
-import encodingDataset from '/benchmarks/player-encoding.json';
-import decodingDataset from '/benchmarks/player-decoding.json';
+import encodingDataset from '/benchmarks/byteform/player-encoding.json';
+import decodingDataset from '/benchmarks/byteform/player-decoding.json';
 
 # Byteform
 
@@ -47,11 +47,11 @@ Benchmarks are run on a `13th Gen Intel(R) Core(TM) i7-13620H   2.40 GHz` and `1
 <details>
   <summary>Source code</summary>
 
-  - Byteform benchmark <a href={getDefinedInUrl('/benchmark/src/player-encoding.ts', 12, 47)}>source</a>
-  - JSON benchmark <a href={getDefinedInUrl('/benchmark/src/player-encoding.ts', 49, 60)}>source</a>
-  - Msgpack-lite benchmark <a href={getDefinedInUrl('/benchmark/src/player-encoding.ts', 62, 73)}>source</a>
-  - Flatbuffers benchmark <a href={getDefinedInUrl('/benchmark/src/flatbuffers/encode.ts', 6, 37)}>source</a>
-  - BSON benchmark <a href={getDefinedInUrl('/benchmark/src/player-encoding.ts', 77, 88)}>source</a>
+  - Byteform benchmark <a href={getDefinedInUrl('/benchmark/src/byteform/player-encoding.ts', 12, 47)}>source</a>
+  - JSON benchmark <a href={getDefinedInUrl('/benchmark/src/byteform/player-encoding.ts', 49, 60)}>source</a>
+  - Msgpack-lite benchmark <a href={getDefinedInUrl('/benchmark/src/byteform/player-encoding.ts', 62, 73)}>source</a>
+  - Flatbuffers benchmark <a href={getDefinedInUrl('/benchmark/src/byteform/flatbuffers/encode.ts', 6, 37)}>source</a>
+  - BSON benchmark <a href={getDefinedInUrl('/benchmark/src/byteform/player-encoding.ts', 77, 88)}>source</a>
 </details>
 
 ## Decoding
@@ -61,9 +61,9 @@ Benchmarks are run on a `13th Gen Intel(R) Core(TM) i7-13620H   2.40 GHz` and `1
 <details>
   <summary>Source code</summary>
   
-  - Byteform benchmark <a href={getDefinedInUrl('/benchmark/src/player-decoding.ts', 13, 50)}>source</a>
-  - JSON benchmark <a href={getDefinedInUrl('/benchmark/src/player-decoding.ts', 52, 69)}>source</a>
-  - Msgpack-lite benchmark <a href={getDefinedInUrl('/benchmark/src/player-decoding.ts', 71, 88)}>source</a>
-  - Flatbuffers benchmark <a href={getDefinedInUrl('/benchmark/src/flatbuffers/decode.ts', 5, 46)}>source</a>
-  - BSON benchmark <a href={getDefinedInUrl('/benchmark/src/player-decoding.ts', 98, 115)}>source</a>
+  - Byteform benchmark <a href={getDefinedInUrl('/benchmark/src/byteform/player-decoding.ts', 13, 50)}>source</a>
+  - JSON benchmark <a href={getDefinedInUrl('/benchmark/src/byteform/player-decoding.ts', 52, 69)}>source</a>
+  - Msgpack-lite benchmark <a href={getDefinedInUrl('/benchmark/src/byteform/player-decoding.ts', 71, 88)}>source</a>
+  - Flatbuffers benchmark <a href={getDefinedInUrl('/benchmark/src/byteform/flatbuffers/decode.ts', 5, 46)}>source</a>
+  - BSON benchmark <a href={getDefinedInUrl('/benchmark/src/byteform/player-decoding.ts', 98, 115)}>source</a>
 </details>

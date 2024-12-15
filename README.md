@@ -70,12 +70,12 @@ const Player = new Struct({
 ### Encode data
 
 ```typescript
-import { BinaryEncoder } from '@evenstar/byteform';
+import { ByteStreamWriter } from '@evenstar/byteform';
 
-const encoder = BinaryEncoder.create(1024); // 1KB buffer
+const encoder = new ByteStreamWriter(1024); // 1KB buffer
 
 // Encode a Player instance
-encoder.encode(Player, {
+encoder.writeSchema(Player, {
   name: 'Alice',
   level: 10,
   position: { x: 1.0, y: 2.0, z: 3.0 },
@@ -97,16 +97,16 @@ encoder.encode(Player, {
  * Get the encoded binary data
  * Send the buffer over the network, save it to a file, etc.
  */
-const buffer = encoder.commit();
+const { buffer } = encoder.commit();
 ```
 
 ### Decode data
 
 ```typescript
-import { BinaryDecoder } from '@evenstar/byteform';
+import { ByteStreamReader } from '@evenstar/byteform';
 
-const decoder = BinaryDecoder.fromArrayBuffer(buffer);
-const player = decoder.decode(Player);
+const decoder = new ByteStreamReader(buffer);
+const player = decoder.readSchema(Player);
 
 console.log(player);
 ```
