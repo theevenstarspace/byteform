@@ -1,14 +1,30 @@
 import { ByteStreamWriter } from "../src";
 
 describe("ByteStreamWriter", () => {
-  it("should create a buffer writer", () => {
+  it("should create a buffer writer from byte length", () => {
     const writer = new ByteStreamWriter(16);
+    expect(writer.buffer.byteLength).toBe(16);
+    expect(writer.position).toBe(0);
+  });
+
+  it("should create a buffer writer from ArrayBuffer", () => {
+    const writer = new ByteStreamWriter(new ArrayBuffer(16));
+    expect(writer.buffer.byteLength).toBe(16);
+    expect(writer.position).toBe(0);
+  });
+
+  it("should create a buffer writer from TypedArray", () => {
+    const writer = new ByteStreamWriter(new Uint8Array(16));
     expect(writer.buffer.byteLength).toBe(16);
     expect(writer.position).toBe(0);
   });
 
   it("should throw an error when creating a buffer writer with an invalid size", () => {
     expect(() => new ByteStreamWriter(0)).toThrow(Error);
+  });
+
+  it("should throw an error when creating a buffer writer with a SharedArrayBuffer instance", () => {
+    expect(() => new ByteStreamWriter(new SharedArrayBuffer(32))).toThrow(TypeError);
   });
 
   it("should resize the buffer", () => {

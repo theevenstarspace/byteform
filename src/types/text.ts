@@ -28,21 +28,18 @@ class Text implements Schema<string> {
    * @param value - The string to write.
    */
   public write(writer: ByteStreamWriter, value: string): void {
+    try {
+      writer.reserve(4 + (value.length * 3)); // Reserve space for the encoded string
+    } catch (e) {
+      throw new RangeError(`Failed to write text: ${e.message}`);
+    }
+
     const res = Encoder.encodeInto(value, new Uint8Array(writer.buffer, writer.position + 4));
 
-    if (res.read !== value.length) {
-      try {
-        /**
-         * If w reserves enough space for the encoded string, we can write it directly.
-         * Otherwise, a buffer overflow error will be thrown.
-         */
-        writer.reserve((value.length * 3) + 4);
-        this.write(writer, value);
-      } catch (e) {
-        // RangeError, since it called during the stream writing process
-        throw new RangeError(`Failed to write text: ${e.message}`);
-      }
-    }
+    // This should never happen since we reserved enough space
+    // if (res.read !== value.length) {
+    //   throw new Error("Failed to encode text");
+    // }
 
     writer.writeUint32(res.written); // Write the length of the encoded string
     writer.skip(res.written); // Skip the encoded string

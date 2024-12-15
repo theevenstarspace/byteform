@@ -161,7 +161,7 @@ export class ByteStreamWriter extends ByteStream {
    * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the buffer is not resizable and the reserved space exceeds the buffer capacity
    */
   public reserve(byteLength: number): void {
-    if (this.remaining < byteLength) {
+    while (this.remaining < byteLength) {
       if (!this._buffer.resizable) {
         const expectedByteLength = this._offset + byteLength;
         // Range error since this function is only called during writing to the buffer
