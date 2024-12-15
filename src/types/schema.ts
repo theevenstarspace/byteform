@@ -11,11 +11,11 @@ import type { SchemaLike } from "./schema-like";
 export type Schema<T = unknown> = SchemaLike<T, ByteStreamReader, ByteStreamWriter>;
 
 /**
- * Utility function to create a type descriptor.
+ * Utility function to create a schema descriptor.
  * @group Helpers
  * 
- * @param descriptor - The type descriptor.
- * @typeParam T - The type of the schema.
+ * @param descriptor - The schema descriptor.
+ * @typeParam T - The type of the schema data.
  * @returns The schema type.
  */
 export const createSchema = <T>(descriptor: Schema<T>): Readonly<Schema<T>> => descriptor;
