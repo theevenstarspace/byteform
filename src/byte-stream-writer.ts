@@ -1,4 +1,5 @@
 import { ByteStream } from "./byte-stream";
+import type { TypedArray } from "./byte-stream";
 import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
 /**
@@ -102,15 +103,40 @@ export class ByteStreamWriter extends ByteStream {
    * @param options - The options for buffer resizing
    * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the initial buffer size is invalid or the maxByteLength is less than the initial buffer size
    */
-  public constructor(byteLength: number, options: Partial<ResizeOptions> = {}) {
-    if (byteLength <= 0) {
-      throw new Error(`Invalid initial buffer size: ${byteLength}`);
-    }
+  public constructor(byteLength: number, options?: Partial<ResizeOptions>);
 
+  /**
+   * Creates a new buffer writer.
+   * @param buffer - The buffer to write to
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the initial buffer size is invalid or the maxByteLength is less than the initial buffer size
+   */
+  public constructor(buffer: ArrayBuffer);
+
+  /**
+   * Creates a new buffer writer.
+   * @param typedArray - The TypedArray to use an underlying buffer for writing
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the initial buffer size is invalid or the maxByteLength is less than the initial buffer size
+   */
+  public constructor(typedArray: TypedArray);
+
+  public constructor(target: number | ArrayBuffer | TypedArray, options: Partial<ResizeOptions> = {}) {
     const targetOptions = { ...defaultOptions, ...options };
-    const buffer = new ArrayBuffer(byteLength, { maxByteLength: targetOptions.maxByteLength });
 
-    super(buffer);
+    if (typeof target === 'number') {
+      const byteLength = target;
+
+      if (byteLength <= 0) {
+        throw new Error(`Invalid initial buffer size: ${byteLength}`);
+      }
+
+      const buffer = new ArrayBuffer(byteLength, { maxByteLength: targetOptions.maxByteLength });
+
+      super(buffer);
+    } else if (ArrayBuffer.isView(target)) {
+      super(target as TypedArray);
+    } else {
+      super(target as ArrayBuffer);
+    }
 
     this._options = targetOptions;
     this._resizeFn = ResizeStrategies[targetOptions.strategy];
@@ -161,17 +187,9 @@ export class ByteStreamWriter extends ByteStream {
 
   /**
    * Commits the buffer.
-   * @returns The ArrayBuffer containing the written data
-   */
-  public commit(): ArrayBuffer {
-    return this._buffer.slice(0, this._offset);
-  }
-
-  /**
-   * Commits the buffer as a Uint8Array.
    * @returns The Uint8Array containing the written data
    */
-  public commitUint8Array(): Uint8Array {
+  public commit(): Uint8Array<ArrayBuffer> {
     return this._u8.slice(0, this._offset);
   }
 
@@ -179,7 +197,7 @@ export class ByteStreamWriter extends ByteStream {
    * Converts the buffer to a Uint8Array.
    * @returns The Uint8Array containing the written data
    */
-  public toUint8Array(): Uint8Array {
+  public toUint8Array(): Uint8Array<ArrayBuffer> {
     return new Uint8Array(this._buffer, 0, this._offset);
   }
 
