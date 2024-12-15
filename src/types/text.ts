@@ -21,34 +21,31 @@ const Decoder = new TextDecoder();
  * A type that represents a string of text.
  * @group Types
  */
-export class Text implements Schema<string> {
-  /**
-   * The intermediate buffer to store the encoded string before writing it to the buffer.
-   */
-  private stringBuffer: Uint8Array;
-
-  /**
-   * Creates a new text type.
-   * @param maxByteLength - The maximum byte length of the encoded string
-   */
-  public constructor(maxByteLength: number = 256) {
-    this.stringBuffer = new Uint8Array(maxByteLength);
-  }
-
+class Text implements Schema<string> {
   /**
    * Writes the string to the buffer.
    * @param writer - The buffer writer.
    * @param value - The string to write.
    */
   public write(writer: ByteStreamWriter, value: string): void {
-    const res = Encoder.encodeInto(value, this.stringBuffer);
+    const res = Encoder.encodeInto(value, new Uint8Array(writer.buffer, writer.position + 4));
 
     if (res.read !== value.length) {
-      throw new RangeError(`Failed to encode string, only ${res.read} symbols out of ${value.length} were encoded. Using a new instance of Text type with a larger maxByteLength might help.`);
+      try {
+        /**
+         * If w reserves enough space for the encoded string, we can write it directly.
+         * Otherwise, a buffer overflow error will be thrown.
+         */
+        writer.reserve((value.length * 3) + 4);
+        this.write(writer, value);
+      } catch (e) {
+        // RangeError, since it called during the stream writing process
+        throw new RangeError(`Failed to write text: ${e.message}`);
+      }
     }
 
-    writer.writeUint32(res.written);
-    writer.writeBytes(this.stringBuffer, res.written);
+    writer.writeUint32(res.written); // Write the length of the encoded string
+    writer.skip(res.written); // Skip the encoded string
   }
 
   /**
