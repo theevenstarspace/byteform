@@ -11,5 +11,11 @@ export const getOptions = (folder: string, name: string): SaveOptions => ({
   format: 'json',
 });
 
+export const cleanup = (): void => {
+  if (global.gc) {
+    global.gc();
+  }
+};
+
 
 

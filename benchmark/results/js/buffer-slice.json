@@ -1,0 +1,27 @@
+{
+  "name": "Buffer Slice",
+  "date": "2024-12-15T14:39:13.674Z",
+  "version": "1.0.0",
+  "results": [
+    {
+      "name": "ArrayBuffer",
+      "ops": 1926237,
+      "margin": 1.96,
+      "percentSlower": 43.42
+    },
+    {
+      "name": "Uint8Array",
+      "ops": 3404556,
+      "margin": 0.71,
+      "percentSlower": 0
+    }
+  ],
+  "fastest": {
+    "name": "Uint8Array",
+    "index": 1
+  },
+  "slowest": {
+    "name": "ArrayBuffer",
+    "index": 0
+  }
+}

@@ -1,8 +1,8 @@
 import benny from 'benny';
 import msgpack from 'msgpack-lite';
 import { BSON } from 'bson';
-import { BinaryDecoder, BinaryEncoder, f32, List, Struct, text } from '@evenstar/byteform';
-import { getOptions } from '../utils';
+import { ByteStreamReader, ByteStreamWriter, f32, List, Struct, text } from '@evenstar/byteform';
+import { cleanup, getOptions } from '../utils';
 import type { Summary } from 'benny/lib/internal/common-types';
 import { encodePlayerFlatbuffer } from './flatbuffers/encode';
 import { decodePlayerFlatbuffer } from './flatbuffers/decode';
@@ -24,9 +24,9 @@ export const PlayerDecoding = (): Promise<Summary> => benny.suite(
     });
 
     /** CREATE ENCODER AND ENCODE PLAYER **/
-    const encoder = BinaryEncoder.create(128);
+    const encoder = new ByteStreamWriter(128);
 
-    encoder.encode(player, {
+    encoder.writeSchema(player, {
       name: 'Player',
       position: { x: 1, y: 2, z: 3 },
       rotation: 0,
@@ -42,10 +42,10 @@ export const PlayerDecoding = (): Promise<Summary> => benny.suite(
     /** CYCLE FUNCTION **/
     return (): void => {
       // Create a decoder from the encoded data
-      const decoder = BinaryDecoder.fromArrayBuffer(buffer);
+      const decoder = new ByteStreamReader(buffer);
 
       // Decode the player object
-      decoder.decode(player);
+      decoder.readSchema(player);
     };
   }),
 
@@ -115,7 +115,7 @@ export const PlayerDecoding = (): Promise<Summary> => benny.suite(
   }),
 
   benny.cycle(),
-  benny.complete(),
+  benny.complete(cleanup),
 
   benny.save(getOptions('byteform', 'player-decoding')),
 );

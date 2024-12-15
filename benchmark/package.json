@@ -18,7 +18,7 @@
     "tsx": "^4.19.2"
   },
   "dependencies": {
-    "@evenstar/byteform": "^0.9.2",
+    "@evenstar/byteform": "link:../",
     "benny": "^3.7.1",
     "bson": "^6.10.0",
     "flatbuffers": "^24.3.25",

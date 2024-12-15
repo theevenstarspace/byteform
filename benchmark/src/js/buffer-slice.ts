@@ -1,5 +1,5 @@
 import benny from 'benny';
-import { getOptions } from '../utils';
+import { cleanup, getOptions } from '../utils';
 import type { Summary } from "benny/lib/internal/common-types";
 
 const ab = new ArrayBuffer(256);
@@ -21,7 +21,7 @@ export const BufferSlice = (): Promise<Summary> => benny.suite(
   }),
 
   benny.cycle(),
-  benny.complete(),
+  benny.complete(cleanup),
 
-  benny.save(getOptions('js', 'string-encoding')),
+  benny.save(getOptions('js', 'buffer-slice')),
 );
