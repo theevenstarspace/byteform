@@ -2,7 +2,7 @@ import benny from 'benny';
 import msgpack from 'msgpack-lite';
 import { BSON } from 'bson';
 import { BinaryDecoder, BinaryEncoder, f32, List, Struct, text } from '@evenstar/byteform';
-import { getOptions } from './utils';
+import { getOptions } from '../utils';
 import type { Summary } from 'benny/lib/internal/common-types';
 import { encodePlayerFlatbuffer } from './flatbuffers/encode';
 import { decodePlayerFlatbuffer } from './flatbuffers/decode';
@@ -117,5 +117,5 @@ export const PlayerDecoding = (): Promise<Summary> => benny.suite(
   benny.cycle(),
   benny.complete(),
 
-  benny.save(getOptions('player-decoding')),
+  benny.save(getOptions('byteform', 'player-decoding')),
 );
