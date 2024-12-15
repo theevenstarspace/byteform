@@ -1,10 +1,11 @@
-import { BufferView } from "./buffer-view";
+import { ByteStream } from "./byte-stream";
+import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
 /**
  * A class that provides methods to read data from a buffer.
- * @group Decoding
+ * @group Streams
  */
-export class BufferReader extends BufferView {
+export class ByteStreamReader extends ByteStream {
   /**
    * Reads an unsigned 8-bit integer from the buffer.
    * @returns Read value
@@ -145,5 +146,15 @@ export class BufferReader extends BufferView {
     const value = new Uint8Array(this._buffer, this._offset, byteLength);
     this._offset += byteLength;
     return value;
+  }
+
+  /**
+   * Reads a schema from the buffer.
+   * @param schema - The schema to read
+   * @returns The value read from the buffer
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the buffer is out of bounds
+   */
+  public readSchema<T extends SchemaLike>(schema: T): InferSchemaType<T> {
+    return schema.read(this) as InferSchemaType<T>;
   }
 }

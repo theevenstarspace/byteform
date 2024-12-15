@@ -1,11 +1,11 @@
-import { createType } from "./base";
+import { createSchema } from "./schema";
 
 /**
  * A type that represents an unsigned 8-bit integer.
  * @group Available Types
  */
-export const u8 = createType<number>({
-  write: (value, writer) => writer.writeUint8(value),
+export const u8 = createSchema<number>({
+  write: (writer, value) => writer.writeUint8(value),
   read: (reader) => reader.readUint8(),
 });
 
@@ -13,8 +13,8 @@ export const u8 = createType<number>({
  * A type that represents a signed 8-bit integer.
  * @group Available Types
  */
-export const i8 = createType<number>({
-  write: (value, writer) => writer.writeInt8(value),
+export const i8 = createSchema<number>({
+  write: (writer, value) => writer.writeInt8(value),
   read: (reader) => reader.readInt8(),
 });
 
@@ -22,8 +22,8 @@ export const i8 = createType<number>({
  * A type that represents an unsigned 16-bit integer (little-endian).
  * @group Available Types
  */
-export const u16le = createType<number>({
-  write: (value, writer) => writer.writeUint16(value, true),
+export const u16le = createSchema<number>({
+  write: (writer, value) => writer.writeUint16(value, true),
   read: (reader) => reader.readUint16(true),
 });
 
@@ -31,8 +31,8 @@ export const u16le = createType<number>({
  * A type that represents an unsigned 16-bit integer (big-endian).
  * @group Available Types
  */
-export const u16be = createType<number>({
-  write: (value, writer) => writer.writeUint16(value),
+export const u16be = createSchema<number>({
+  write: (writer, value) => writer.writeUint16(value),
   read: (reader) => reader.readUint16(),
 });
 
@@ -40,8 +40,8 @@ export const u16be = createType<number>({
  * A type that represents a signed 16-bit integer (little-endian).
  * @group Available Types
  */
-export const i16le = createType<number>({
-  write: (value, writer) => writer.writeInt16(value, true),
+export const i16le = createSchema<number>({
+  write: (writer, value) => writer.writeInt16(value, true),
   read: (reader) => reader.readInt16(true),
 });
 
@@ -49,8 +49,8 @@ export const i16le = createType<number>({
  * A type that represents a signed 16-bit integer (big-endian).
  * @group Available Types
  */
-export const i16be = createType<number>({
-  write: (value, writer) => writer.writeInt16(value),
+export const i16be = createSchema<number>({
+  write: (writer, value) => writer.writeInt16(value),
   read: (reader) => reader.readInt16(),
 });
 
@@ -58,8 +58,8 @@ export const i16be = createType<number>({
  * A type that represents an unsigned 32-bit integer (little-endian).
  * @group Available Types
  */
-export const u32le = createType<number>({
-  write: (value, writer) => writer.writeUint32(value, true),
+export const u32le = createSchema<number>({
+  write: (writer, value) => writer.writeUint32(value, true),
   read: (reader) => reader.readUint32(true),
 });
 
@@ -67,8 +67,8 @@ export const u32le = createType<number>({
  * A type that represents an unsigned 32-bit integer (big-endian).
  * @group Available Types
  */
-export const u32be = createType<number>({
-  write: (value, writer) => writer.writeUint32(value),
+export const u32be = createSchema<number>({
+  write: (writer, value) => writer.writeUint32(value),
   read: (reader) => reader.readUint32(),
 });
 
@@ -76,8 +76,8 @@ export const u32be = createType<number>({
  * A type that represents a signed 32-bit integer (little-endian).
  * @group Available Types
  */
-export const i32le = createType<number>({
-  write: (value, writer) => writer.writeInt32(value, true),
+export const i32le = createSchema<number>({
+  write: (writer, value) => writer.writeInt32(value, true),
   read: (reader) => reader.readInt32(true),
 });
 
@@ -85,8 +85,8 @@ export const i32le = createType<number>({
  * A type that represents a signed 32-bit integer (big-endian).
  * @group Available Types
  */
-export const i32be = createType<number>({
-  write: (value, writer) => writer.writeInt32(value),
+export const i32be = createSchema<number>({
+  write: (writer, value) => writer.writeInt32(value),
   read: (reader) => reader.readInt32(),
 });
 
@@ -94,8 +94,8 @@ export const i32be = createType<number>({
  * A type that represents an unsigned 64-bit integer (little-endian).
  * @group Available Types
  */
-export const u64le = createType<bigint>({
-  write: (value, writer) => writer.writeUint64(value, true),
+export const u64le = createSchema<bigint>({
+  write: (writer, value) => writer.writeUint64(value, true),
   read: (reader) => reader.readUint64(true),
 });
 
@@ -103,8 +103,8 @@ export const u64le = createType<bigint>({
  * A type that represents an unsigned 64-bit integer (big-endian).
  * @group Available Types
  */
-export const u64be = createType<bigint>({
-  write: (value, writer) => writer.writeUint64(value),
+export const u64be = createSchema<bigint>({
+  write: (writer, value) => writer.writeUint64(value),
   read: (reader) => reader.readUint64(),
 });
 
@@ -112,8 +112,8 @@ export const u64be = createType<bigint>({
  * A type that represents a signed 64-bit integer (little-endian).
  * @group Available Types
  */
-export const i64le = createType<bigint>({
-  write: (value, writer) => writer.writeInt64(value, true),
+export const i64le = createSchema<bigint>({
+  write: (writer, value) => writer.writeInt64(value, true),
   read: (reader) => reader.readInt64(true),
 });
 
@@ -121,8 +121,8 @@ export const i64le = createType<bigint>({
  * A type that represents a signed 64-bit integer (big-endian).
  * @group Available Types
  */
-export const i64be = createType<bigint>({
-  write: (value, writer) => writer.writeInt64(value),
+export const i64be = createSchema<bigint>({
+  write: (writer, value) => writer.writeInt64(value),
   read: (reader) => reader.readInt64(),
 });
 
@@ -130,8 +130,8 @@ export const i64be = createType<bigint>({
  * A type that represents a 32-bit floating-point number (little-endian).
  * @group Available Types
  */
-export const f32le = createType<number>({
-  write: (value, writer) => writer.writeFloat32(value, true),
+export const f32le = createSchema<number>({
+  write: (writer, value) => writer.writeFloat32(value, true),
   read: (reader) => reader.readFloat32(true),
 });
 
@@ -139,8 +139,8 @@ export const f32le = createType<number>({
  * A type that represents a 32-bit floating-point number (big-endian).
  * @group Available Types
  */
-export const f32be = createType<number>({
-  write: (value, writer) => writer.writeFloat32(value),
+export const f32be = createSchema<number>({
+  write: (writer, value) => writer.writeFloat32(value),
   read: (reader) => reader.readFloat32(),
 });
 
@@ -148,8 +148,8 @@ export const f32be = createType<number>({
  * A type that represents a 64-bit floating-point number (little-endian).
  * @group Available Types
  */
-export const f64le = createType<number>({
-  write: (value, writer) => writer.writeFloat64(value, true),
+export const f64le = createSchema<number>({
+  write: (writer, value) => writer.writeFloat64(value, true),
   read: (reader) => reader.readFloat64(true),
 });
 
@@ -157,55 +157,55 @@ export const f64le = createType<number>({
  * A type that represents a 64-bit floating-point number (big-endian).
  * @group Available Types
  */
-export const f64be = createType<number>({
-  write: (value, writer) => writer.writeFloat64(value),
+export const f64be = createSchema<number>({
+  write: (writer, value) => writer.writeFloat64(value),
   read: (reader) => reader.readFloat64(),
 });
 
 /**
- * Type alias for {@link u16be}. Which is an unsigned 16-bit integer (big-endian).
+ * Type alias for {@link u16le}. Which is an unsigned 16-bit integer (little-endian).
  * @group Available Types
  */
-export const u16 = u16be;
+export const u16 = u16le;
 
 /**
- * Type alias for {@link i16be}. Which is a signed 16-bit integer (big-endian).
+ * Type alias for {@link i16le}. Which is a signed 16-bit integer (little-endian).
  * @group Available Types
  */
-export const i16 = i16be;
+export const i16 = i16le;
 
 /**
- * Type alias for {@link u32be}. Which is an unsigned 32-bit integer (big-endian).
+ * Type alias for {@link u32le}. Which is an unsigned 32-bit integer (little-endian).
  * @group Available Types
  */
-export const u32 = u32be;
+export const u32 = u32le;
 
 /**
- * Type alias for {@link i32be}. Which is a signed 32-bit integer (big-endian).
+ * Type alias for {@link i32le}. Which is a signed 32-bit integer (little-endian).
  * @group Available Types
  */
-export const i32 = i32be;
+export const i32 = i32le;
 
 /**
- * Type alias for {@link u64be}. Which is an unsigned 64-bit integer (big-endian).
+ * Type alias for {@link u64le}. Which is an unsigned 64-bit integer (little-endian).
  * @group Available Types
  */
-export const u64 = u64be;
+export const u64 = u64le;
 
 /**
- * Type alias for {@link i64be}. Which is a signed 64-bit integer (big-endian).
+ * Type alias for {@link i64le}. Which is a signed 64-bit integer (little-endian).
  * @group Available Types
  */
-export const i64 = i64be;
+export const i64 = i64le;
 
 /**
- * Type alias for {@link f32be}. Which is a 32-bit floating-point number (big-endian).
+ * Type alias for {@link f32le}. Which is a 32-bit floating-point number (little-endian).
  * @group Available Types
  */
-export const f32 = f32be;
+export const f32 = f32le;
 
 /**
- * Type alias for {@link f64be}. Which is a 64-bit floating-point number (big-endian).
+ * Type alias for {@link f64le}. Which is a 64-bit floating-point number (little-endian).
  * @group Available Types
  */
-export const f64 = f64be;
+export const f64 = f64le;

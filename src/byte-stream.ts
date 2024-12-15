@@ -1,12 +1,26 @@
+export type TypedArray =
+  | Int8Array
+  | Uint8Array
+  | Uint8ClampedArray
+  | Int16Array
+  | Uint16Array
+  | Int32Array
+  | Uint32Array
+  | Float32Array
+  | Float64Array
+  | BigInt64Array
+  | BigUint64Array;
+
+
 /**
  * Base class for reading and writing binary data.
  * @group Helpers
  */
-export class BufferView {
+export class ByteStream {
   /**
    * The underlying buffer.
    */
-  protected _buffer: ArrayBuffer;
+  protected _buffer: ArrayBufferLike;
 
   /**
    * The DataView instance to read data from the buffer.
@@ -25,13 +39,27 @@ export class BufferView {
 
   /**
    * Creates a new buffer view.
-   * @param buffer - The buffer to read/write data from/to
+   * @param buffer - The ArrayBuffer/SharedArrayBuffer to read/write data from/to
    */
-  public constructor(buffer: ArrayBuffer) {
-    this._buffer = buffer;
-    this._view = new DataView(buffer);
-    this._u8 = new Uint8Array(buffer);
-    this._offset = 0;
+  public constructor(buffer: ArrayBufferLike);
+
+  /**
+   * Creates a new buffer view.
+   * @param typedArray - The TypedArray to read/write data from/to
+   */
+  public constructor(typedArray: TypedArray);
+
+  public constructor(target: ArrayBufferLike | TypedArray) {
+    if (ArrayBuffer.isView(target)) {
+      this._buffer = target.buffer;
+      this._offset = target.byteOffset;
+    } else {
+      this._buffer = target;
+      this._offset = 0;
+    }
+    
+    this._view = new DataView(this._buffer);
+    this._u8 = new Uint8Array(this._buffer);
   }
 
   /**
@@ -72,7 +100,7 @@ export class BufferView {
   /**
    * Returns the underlying buffer
    */
-  public get buffer(): ArrayBuffer {
+  public get buffer(): ArrayBufferLike {
     return this._buffer;
   }
 

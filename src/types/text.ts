@@ -1,6 +1,6 @@
-import type { BufferReader } from "../buffer-reader";
-import type { BufferWriter } from "../buffer-writer";
-import type { BaseType } from "./base";
+import type { ByteStreamReader } from "../byte-stream-reader";
+import type { ByteStreamWriter } from "../byte-stream-writer";
+import type { Schema } from "./schema";
 
 /**
  * @see [TextEncoder](https://nodejs.org/api/globals.html#textencoder)
@@ -21,34 +21,28 @@ const Decoder = new TextDecoder();
  * A type that represents a string of text.
  * @group Types
  */
-export class Text implements BaseType<string> {
-  /**
-   * The intermediate buffer to store the encoded string before writing it to the buffer.
-   */
-  private stringBuffer: Uint8Array;
-
-  /**
-   * Creates a new text type.
-   * @param maxByteLength - The maximum byte length of the encoded string
-   */
-  public constructor(maxByteLength: number = 256) {
-    this.stringBuffer = new Uint8Array(maxByteLength);
-  }
-
+class Text implements Schema<string> {
   /**
    * Writes the string to the buffer.
-   * @param value - The string to write.
    * @param writer - The buffer writer.
+   * @param value - The string to write.
    */
-  public write(value: string, writer: BufferWriter): void {
-    const res = Encoder.encodeInto(value, this.stringBuffer);
-
-    if (res.read !== value.length) {
-      throw new RangeError(`Failed to encode string, only ${res.read} symbols out of ${value.length} were encoded. Using a new instance of Text type with a larger maxByteLength might help.`);
+  public write(writer: ByteStreamWriter, value: string): void {
+    try {
+      writer.reserve(4 + (value.length * 3)); // Reserve space for the encoded string
+    } catch (e) {
+      throw new RangeError(`Failed to write text: ${e.message}`);
     }
 
-    writer.writeUint32(res.written);
-    writer.writeBytes(this.stringBuffer, res.written);
+    const res = Encoder.encodeInto(value, new Uint8Array(writer.buffer, writer.position + 4));
+
+    // This should never happen since we reserved enough space
+    // if (res.read !== value.length) {
+    //   throw new Error("Failed to encode text");
+    // }
+
+    writer.writeUint32(res.written); // Write the length of the encoded string
+    writer.skip(res.written); // Skip the encoded string
   }
 
   /**
@@ -56,7 +50,7 @@ export class Text implements BaseType<string> {
    * @param reader - The buffer reader.
    * @returns The string read from the buffer.
    */
-  public read(reader: BufferReader): string {
+  public read(reader: ByteStreamReader): string {
     const length = reader.readUint32();
     const offset = reader.position;
     reader.skip(length);

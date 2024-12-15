@@ -8,94 +8,51 @@ Assuming you have read the [Schema Definition](/guides/schema-definition.mdx) gu
 
 ## Encoding
 
-Encoding in Byteform is the process of converting data from its native format to a binary format. There are two ways to encode data:
+Encoding in Byteform is the process of converting data from its native format to a binary format.
 
-### BinaryEncoder
+### ByteStreamWriter
 
-[BinaryEncoder](/api/classes/BinaryEncoder.md) it's an easiest way to encode data. It provides a high-level API that allows you to encode data using a schema.
+[ByteStreamWriter](/api/classes/ByteStreamWriter.md) provides a high-level API that allows you to encode data using a schema.
 
 ```typescript
-import { BinaryEncoder } from '@evenstar/byteform';
+import { ByteStreamWriter } from '@evenstar/byteform';
 
-// Create an instance of BinaryEncoder
-const encoder = BinaryEncoder.create(256); // 256 bytes buffer is used internally to write the encoded data
+// Create an instance of ByteStreamWriter
+const encoder = new ByteStreamWriter(256); // 256 bytes buffer is used internally to write the encoded data
 
-encoder.encode(schema, data); // Encode the data using the schema
+encoder.writeSchema(schema, data); // Encode the data using the schema
 
-// Retrieve the encoded data as an ArrayBuffer
-const arrayBuffer = encoder.commit(); // Copies the encoded data to a new ArrayBuffer
+// Retrieve the encoded data as an Uint8Array
+const { buffer } = encoder.commit(); // Copies the encoded data to a new Uint8Array
 
 // Do something with the encoded data
-webSocket.send(arrayBuffer);
+webSocket.send(buffer);
 ```
-
-:::info
-As you might have noticed, in above example we used a static method `create` to create an encoder instance. It's also possible to create an encoder using it's constructor which takes a BufferWriter as an argument which we will cover in the next section.
-:::
 
 It's possible to reuse the same encoder instance to encode multiple objects. However, it's important to call `encoder.reset()` before encoding a new object.
 
 ```typescript
-encoder.encode(schema1, data1);
-const arrayBuffer1 = encoder.commit(); // Encoded data for data1
+encoder.writeSchema(schema1, data1);
+const uint8Array1 = encoder.commit(); // Encoded data for data1
 
 encoder.reset(); // Reset the encoder
-encoder.encode(schema2, data2);
-const arrayBuffer2 = encoder.commit(); // Encoded data for data2
+encoder.writeSchema(schema2, data2);
+const uint8Array2 = encoder.commit(); // Encoded data for data2
 ```
 
 It's also possible to encode a few objects in a single buffer. You can write as many objects as you want, as long as the buffer has enough space.
 
 ```typescript
-encoder.encode(schema1, data1);
-encoder.encode(schema2, data2);
-const arrayBuffer = encoder.commit(); // Encoded data for data1 and data2
+encoder.writeSchema(schema1, data1);
+encoder.writeSchema(schema2, data2);
+const uint8Array = encoder.commit(); // Encoded data for data1 and data2
 ```
 
-### BufferWriter
+### ByteStreamWriter Options
 
-[BufferWriter](/api/classes/BufferWriter.md) is a low-level API that allows you to write data to a buffer manually. It's useful when you need more control over the encoding process.
+ByteStreamWriter constructor accept the following options:
 
-:::info
-Actually, BinaryEncoder is a wrapper around BufferWriter. It provides a more user-friendly API for encoding data.
-:::
-
-Let's see how to encode data using BufferWriter:
-
-```typescript
-import { BufferWriter } from '@evenstar/byteform';
-
-// Create a writer with a buffer of 256 bytes
-const writer = new BufferWriter(256);
-
-// Write data to the buffer
-schema.write(data, writer);
-
-// Retrieve the encoded data as an ArrayBuffer
-const arrayBuffer = writer.commit();
-
-// Do something with the encoded data
-webSocket.send(arrayBuffer);
-```
-
-The same way you can reuse the writer instance to encode multiple objects.
-
-```typescript
-const writer = new BufferWriter(256);
-
-schema1.write(data1, writer);
-const arrayBuffer1 = writer.commit(); // Encoded data for data1
-
-writer.reset(); // Reset the writer
-schema2.write(data2, writer);
-const arrayBuffer2 = writer.commit(); // Encoded data for data2
-```
-
-### Encoding Options
-
-Both `BinaryEncoder.create` and `BufferWriter` constructor accept the following options:
-
-- `byteLength` - The initial byte length of the buffer. Default is 256.
+- `byteLengthOrBuffer` - The initial byte length of the buffer or ArrayBuffer/TypedArray to use to write to.
 - `options` - An object with encoding options.
 
 Here is the list of available options:
@@ -137,7 +94,13 @@ Here is the list of available options:
   </tbody>
 </table>
 
-### Encoding Strategies
+:::warning
+
+Writing to **SharedArrayBuffer** is not supported yet!
+
+:::
+
+### Writing Strategies
 
 Byteform provides three strategies for growing the buffer:
 
@@ -171,59 +134,25 @@ The formula for calculating the new byte length is:
 
 Decoding in Byteform is the process of converting data from a binary format to its native format. There are two ways to decode data:
 
-### BinaryDecoder
+### ByteStreamReader
 
-[BinaryDecoder](/api/classes/BinaryDecoder.md) it's an easiest way to decode data. It provides a high-level API that allows you to decode data using a schema.
+[ByteStreamReader](/api/classes/ByteStreamReader.md) provides a high-level API that allows you to decode data using a schema.
 
 ```typescript
-import { BinaryDecoder } from '@evenstar/byteform';
+import { ByteStreamReader } from '@evenstar/byteform';
 
 // Create an instance of BinaryDecoder
-const decoder = BinaryDecoder.fromArrayBuffer(arrayBuffer); // Create a decoder from an ArrayBuffer
+const decoder = new ByteStreamReader(arrayBuffer); // Create a reader from an ArrayBuffer
 
 // Decode the data using the schema
-const data = decoder.decode(schema);
+const data = decoder.readSchema(schema);
 
 // Do something with the decoded data
 console.log(data);
 ```
 
-:::info
-As you might have noticed, in above example we used a static method `fromArrayBuffer` to create a decoder instance from an ArrayBuffer. It's also possible to create a decoder using it's constructor which takes a BufferReader as an argument.
-:::
+### ByteStreamReader Options
 
-We will cover BufferReader in the next section, but for now, let's see how to create a decoder using it's constructor:
+ByteStreamReader constructor accept the following options:
 
-```typescript
-import { BinaryDecoder, BufferReader } from '@evenstar/byteform';
-
-// Create a reader from an ArrayBuffer
-const reader = new BufferReader(arrayBuffer);
-
-// Create a decoder from the reader
-const decoder = new BinaryDecoder(reader);
-
-// Decode the data using the schema
-const data = decoder.decode(schema);
-```
-
-### BufferReader
-
-[BufferReader](/api/classes/BufferReader.md) is a low-level API that allows you to read data from a buffer manually. It's useful when you need more control over the decoding process.
-
-> Like BinaryEncoder, BinaryDecoder is a wrapper around BufferReader. It provides a more user-friendly API for decoding data.
-
-Let's see how to decode data using BufferReader:
-
-```typescript
-import { BufferReader } from '@evenstar/byteform';
-
-// Create a reader from an ArrayBuffer
-const reader = new BufferReader(arrayBuffer);
-
-// Read data from the buffer
-const data = schema.read(reader);
-
-// Do something with the decoded data
-console.log(data);
-```
+- `buffer` - ArrayBuffer, SharedArrayBuffer or TypedArray to use to read from.

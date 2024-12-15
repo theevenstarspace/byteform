@@ -1,5 +1,9 @@
-import { PlayerDecoding } from "./player-decoding";
-import { PlayerEncoding } from "./player-encoding";
+import { PlayerEncoding, PlayerDecoding } from './byteform';
+import { BufferSlice, StringDecoding, StringEncoding } from './js';
 
 PlayerEncoding();
 PlayerDecoding();
+
+BufferSlice();
+StringEncoding();
+StringDecoding();
