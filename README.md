@@ -1,8 +1,8 @@
 # Byteform
 
-![GitHub branch check runs](https://img.shields.io/github/check-runs/theevenstarspace/byteform/main?style=flat)
-![npm package minimized gzipped size (scoped)](https://img.shields.io/bundlejs/size/%40evenstar/byteform?style=flat)
-![NPM Version](https://img.shields.io/npm/v/%40evenstar%2Fbyteform?style=flat)
+![GitHub branch check runs][checks]
+[![Build Size][build-size]][build-size-url]
+[![NPM Package][npm]][npm-url]
 
 **Byteform** is a lightweight and versatile TypeScript library designed for encoding and decoding binary data. It provides an intuitive API to work with binary structures, making it an excellent choice for developers dealing with low-level data operations in both browser and Node.js environments.
 
@@ -113,3 +113,9 @@ console.log(player);
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request to get involved.
+
+[npm]: https://img.shields.io/npm/v/@evenstar/byteform?style=flat-square
+[npm-url]: https://www.npmjs.com/package/@evenstar/byteform
+[build-size]: https://flat.badgen.net/bundlephobia/minzip/@evenstar/byteform
+[build-size-url]: https://bundlephobia.com/result?p=@evenstar/byteform
+[checks]: https://img.shields.io/github/check-runs/theevenstarspace/byteform/main?style=flat-square
