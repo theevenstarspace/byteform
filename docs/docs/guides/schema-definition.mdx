@@ -6,10 +6,10 @@ import TabItem from '@theme/TabItem';
 Binary data encoding/decoding in Byteform is done using schemas. A schema is a set of rules that define how data is encoded and decoded. Schemas are defined using a simple, human-readable syntax:
 
 ```typescript
-import { Struct, List, Text, f32, u8 } from '@evenstar/byteform';
+import { Struct, List, text, f32, u8 } from '@evenstar/byteform';
 
 const schema = new Struct({
-  name: new Text(32), // Max 32 bytes
+  name: text, // string
   age: u8, // Unsigned 8-bit integer, e.g. number between 0 and 255
   scores: new List(f32), // List of 32-bit floating point numbers
 });
@@ -38,21 +38,21 @@ The constructor takes an object as an argument, where each key-value pair repres
 <Tabs>
   <TabItem value="simple" label="Simple" default>
     ```typescript
-    import { Struct, Text, u8 } from '@evenstar/byteform';
+    import { Struct, text, u8 } from '@evenstar/byteform';
 
     /**
      * Define a schema with two fields: name and age.
      * Similar to JavaScript object: { name: 'Alice', age: 25 }
      */
     const schema = new Struct({
-      name: new Text(32), // Max 32 bytes string
+      name: text, // string
       age: u8, // Unsigned 8-bit integer, e.g. number between 0 and 255
     });
     ```
   </TabItem>
   <TabItem value="nested" label="Nested">
     ```typescript
-    import { Struct, Text, u8 } from '@evenstar/byteform';
+    import { Struct, text, u8 } from '@evenstar/byteform';
 
     /**
      * Define a schema with three fields: name, age, and address.
@@ -68,19 +68,19 @@ The constructor takes an object as an argument, where each key-value pair repres
      *  }
      */
     const schema = new Struct({
-      name: new Text(32), // Max 32 bytes string
+      name: new text, // string
       age: u8, // Unsigned 8-bit integer, e.g. number between 0 and 255
       address: new Struct({ // Nested struct
-        street: new Text(64), // Max 64 bytes string
-        city: new Text(32), // Max 32 bytes string
-        zip: new Text(10), // Max 10 bytes string
+        street: new text,
+        city: text,
+        zip: text,
       }),
     });
     ```
   </TabItem>
   <TabItem value="typescript" label="With TypeScript">
     ```typescript
-    import { Struct, Text } from '@evenstar/byteform';
+    import { Struct, text } from '@evenstar/byteform';
 
     // Define a TypeScript type
     type Person = {
@@ -93,8 +93,8 @@ The constructor takes an object as an argument, where each key-value pair repres
      * If the schema definition does not match the TypeScript type, a type error will be thrown.
      */
     const schema = new Struct<Person>({
-      name: new Text(32),
-      age: new Text(32) // TypeError: age should have a type that implements number encoding/decoding.
+      name: text,
+      age: text // TypeError: age should have a type that implements number encoding/decoding.
     });
     ```
   </TabItem>
