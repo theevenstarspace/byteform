@@ -1,9 +1,9 @@
-import type { BufferReader } from "../buffer-reader";
-import type { BufferWriter } from "../buffer-writer";
-import type { BaseType } from "./base";
+import type { ByteStreamReader } from "../byte-stream-reader";
+import type { ByteStreamWriter } from "../byte-stream-writer";
+import type { Schema } from "./schema";
 
 type StructTypes<T> = {
-  [K in keyof T]: BaseType<T[K]>;
+  [K in keyof T]: Schema<T[K]>;
 }
 
 /**
@@ -12,11 +12,11 @@ type StructTypes<T> = {
  * 
  * @typeParam T - The type of the structure where each key is a field name and the value is the type of the field.
  */
-export class Struct<T> implements BaseType<T> {
+export class Struct<T> implements Schema<T> {
   /**
    * The entries of the structure.
    */
-  private entries: [string, BaseType<unknown>][] = [];
+  private entries: [string, Schema<unknown>][] = [];
 
   /**
    * Creates a new structure type.
@@ -28,12 +28,12 @@ export class Struct<T> implements BaseType<T> {
 
   /**
    * Writes the structure to the buffer.
-   * @param value - The structure to write.
    * @param writer - The buffer writer.
+   * @param value - The structure to write.
    */
-  public write(value: T, writer: BufferWriter): void {
+  public write(writer: ByteStreamWriter, value: T): void {
     for (const [key, type] of this.entries) {
-      type.write(value[key], writer);
+      type.write(writer, value[key]);
     }
   }
 
@@ -42,7 +42,7 @@ export class Struct<T> implements BaseType<T> {
    * @param reader - The buffer reader.
    * @returns The structure read from the buffer.
    */
-  public read(reader: BufferReader): T {
+  public read(reader: ByteStreamReader): T {
     const value = {} as T;
 
     for (const [key, type] of this.entries) {

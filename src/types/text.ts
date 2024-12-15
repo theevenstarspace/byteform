@@ -1,6 +1,6 @@
-import type { BufferReader } from "../buffer-reader";
-import type { BufferWriter } from "../buffer-writer";
-import type { BaseType } from "./base";
+import type { ByteStreamReader } from "../byte-stream-reader";
+import type { ByteStreamWriter } from "../byte-stream-writer";
+import type { Schema } from "./schema";
 
 /**
  * @see [TextEncoder](https://nodejs.org/api/globals.html#textencoder)
@@ -21,7 +21,7 @@ const Decoder = new TextDecoder();
  * A type that represents a string of text.
  * @group Types
  */
-export class Text implements BaseType<string> {
+export class Text implements Schema<string> {
   /**
    * The intermediate buffer to store the encoded string before writing it to the buffer.
    */
@@ -37,10 +37,10 @@ export class Text implements BaseType<string> {
 
   /**
    * Writes the string to the buffer.
-   * @param value - The string to write.
    * @param writer - The buffer writer.
+   * @param value - The string to write.
    */
-  public write(value: string, writer: BufferWriter): void {
+  public write(writer: ByteStreamWriter, value: string): void {
     const res = Encoder.encodeInto(value, this.stringBuffer);
 
     if (res.read !== value.length) {
@@ -56,7 +56,7 @@ export class Text implements BaseType<string> {
    * @param reader - The buffer reader.
    * @returns The string read from the buffer.
    */
-  public read(reader: BufferReader): string {
+  public read(reader: ByteStreamReader): string {
     const length = reader.readUint32();
     const offset = reader.position;
     reader.skip(length);

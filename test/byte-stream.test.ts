@@ -1,9 +1,9 @@
-import { BufferView } from "../src";
+import { ByteStream } from "../src";
 
 describe("BufferView", () => {
   it("should create a buffer view", () => {
     const buffer = new ArrayBuffer(16);
-    const view = new BufferView(buffer);
+    const view = new ByteStream(buffer);
 
     expect(view.buffer).toBe(buffer);
     expect(view.view).toBeInstanceOf(DataView);
@@ -12,7 +12,7 @@ describe("BufferView", () => {
 
   it("should seek to a position", () => {
     const buffer = new ArrayBuffer(16);
-    const view = new BufferView(buffer);
+    const view = new ByteStream(buffer);
 
     view.seek(8);
     expect(view.position).toBe(8);
@@ -20,7 +20,7 @@ describe("BufferView", () => {
 
   it("should skip to a position", () => {
     const buffer = new ArrayBuffer(16);
-    const view = new BufferView(buffer);
+    const view = new ByteStream(buffer);
 
     view.skip(8);
     expect(view.position).toBe(8);
@@ -28,21 +28,21 @@ describe("BufferView", () => {
 
   it("should throw an error when seeking out of bounds", () => {
     const buffer = new ArrayBuffer(16);
-    const view = new BufferView(buffer);
+    const view = new ByteStream(buffer);
 
     expect(() => view.seek(17)).toThrow(RangeError);
   });
 
   it("should throw an error when skipping out of bounds", () => {
     const buffer = new ArrayBuffer(16);
-    const view = new BufferView(buffer);
+    const view = new ByteStream(buffer);
 
     expect(() => view.skip(17)).toThrow(RangeError);
   });
 
   it("should create a subarray", () => {
     const buffer = new ArrayBuffer(16);
-    const view = new BufferView(buffer);
+    const view = new ByteStream(buffer);
 
     const subarray = view.subarray(8, 16);
     expect(subarray).toBeInstanceOf(Uint8Array);
