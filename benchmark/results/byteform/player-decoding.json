@@ -1,37 +1,37 @@
 {
   "name": "Player decoding",
-  "date": "2024-11-29T22:51:54.323Z",
-  "version": "0.9.2",
+  "date": "2024-12-15T14:39:02.855Z",
+  "version": "1.0.0",
   "results": [
     {
       "name": "Byteform",
-      "ops": 1911408,
-      "margin": 0.27,
-      "percentSlower": 21.49
+      "ops": 1350566,
+      "margin": 2.72,
+      "percentSlower": 26.8
     },
     {
       "name": "JSON",
-      "ops": 682279,
-      "margin": 0.2,
-      "percentSlower": 71.98
+      "ops": 511993,
+      "margin": 1.01,
+      "percentSlower": 72.25
     },
     {
       "name": "Msgpack-lite",
-      "ops": 182240,
-      "margin": 0.33,
-      "percentSlower": 92.51
+      "ops": 131038,
+      "margin": 1.12,
+      "percentSlower": 92.9
     },
     {
       "name": "Flatbuffers",
-      "ops": 2434659,
-      "margin": 0.22,
+      "ops": 1844961,
+      "margin": 0.93,
       "percentSlower": 0
     },
     {
       "name": "BSON",
-      "ops": 724156,
-      "margin": 0.25,
-      "percentSlower": 70.26
+      "ops": 534429,
+      "margin": 1.01,
+      "percentSlower": 71.03
     }
   ],
   "fastest": {

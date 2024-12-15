@@ -1,0 +1,39 @@
+{
+  "name": "String Encoding",
+  "date": "2024-12-15T14:39:35.379Z",
+  "version": "1.0.0",
+  "results": [
+    {
+      "name": "TextEncoder Direct",
+      "ops": 15039896,
+      "margin": 2.85,
+      "percentSlower": 0
+    },
+    {
+      "name": "TextEncoder Indirect (Set)",
+      "ops": 2787408,
+      "margin": 0.86,
+      "percentSlower": 81.47
+    },
+    {
+      "name": "TextEncoder Indirect (Manual)",
+      "ops": 2187580,
+      "margin": 0.73,
+      "percentSlower": 85.45
+    },
+    {
+      "name": "Manual utf8",
+      "ops": 11826303,
+      "margin": 0.81,
+      "percentSlower": 21.37
+    }
+  ],
+  "fastest": {
+    "name": "TextEncoder Direct",
+    "index": 0
+  },
+  "slowest": {
+    "name": "TextEncoder Indirect (Manual)",
+    "index": 2
+  }
+}
