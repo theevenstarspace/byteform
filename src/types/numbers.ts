@@ -163,49 +163,49 @@ export const f64be = createSchema<number>({
 });
 
 /**
- * Type alias for {@link u16be}. Which is an unsigned 16-bit integer (big-endian).
+ * Type alias for {@link u16le}. Which is an unsigned 16-bit integer (little-endian).
  * @group Available Types
  */
-export const u16 = u16be;
+export const u16 = u16le;
 
 /**
- * Type alias for {@link i16be}. Which is a signed 16-bit integer (big-endian).
+ * Type alias for {@link i16le}. Which is a signed 16-bit integer (little-endian).
  * @group Available Types
  */
-export const i16 = i16be;
+export const i16 = i16le;
 
 /**
- * Type alias for {@link u32be}. Which is an unsigned 32-bit integer (big-endian).
+ * Type alias for {@link u32le}. Which is an unsigned 32-bit integer (little-endian).
  * @group Available Types
  */
-export const u32 = u32be;
+export const u32 = u32le;
 
 /**
- * Type alias for {@link i32be}. Which is a signed 32-bit integer (big-endian).
+ * Type alias for {@link i32le}. Which is a signed 32-bit integer (little-endian).
  * @group Available Types
  */
-export const i32 = i32be;
+export const i32 = i32le;
 
 /**
- * Type alias for {@link u64be}. Which is an unsigned 64-bit integer (big-endian).
+ * Type alias for {@link u64le}. Which is an unsigned 64-bit integer (little-endian).
  * @group Available Types
  */
-export const u64 = u64be;
+export const u64 = u64le;
 
 /**
- * Type alias for {@link i64be}. Which is a signed 64-bit integer (big-endian).
+ * Type alias for {@link i64le}. Which is a signed 64-bit integer (little-endian).
  * @group Available Types
  */
-export const i64 = i64be;
+export const i64 = i64le;
 
 /**
- * Type alias for {@link f32be}. Which is a 32-bit floating-point number (big-endian).
+ * Type alias for {@link f32le}. Which is a 32-bit floating-point number (little-endian).
  * @group Available Types
  */
-export const f32 = f32be;
+export const f32 = f32le;
 
 /**
- * Type alias for {@link f64be}. Which is a 64-bit floating-point number (big-endian).
+ * Type alias for {@link f64le}. Which is a 64-bit floating-point number (little-endian).
  * @group Available Types
  */
-export const f64 = f64be;
+export const f64 = f64le;
