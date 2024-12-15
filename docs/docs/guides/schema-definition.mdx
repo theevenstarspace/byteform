@@ -68,10 +68,10 @@ The constructor takes an object as an argument, where each key-value pair repres
      *  }
      */
     const schema = new Struct({
-      name: new text, // string
+      name: text, // string
       age: u8, // Unsigned 8-bit integer, e.g. number between 0 and 255
       address: new Struct({ // Nested struct
-        street: new text,
+        street: text,
         city: text,
         zip: text,
       }),
