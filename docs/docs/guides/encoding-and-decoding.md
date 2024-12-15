@@ -94,6 +94,12 @@ Here is the list of available options:
   </tbody>
 </table>
 
+:::warning
+
+Writing to **SharedArrayBuffer** is not supported yet!
+
+:::
+
 ### Writing Strategies
 
 Byteform provides three strategies for growing the buffer:
@@ -149,4 +155,4 @@ console.log(data);
 
 ByteStreamReader constructor accept the following options:
 
-- `buffer` - ArrayBuffer or TypedArray to use to read from.
+- `buffer` - ArrayBuffer, SharedArrayBuffer or TypedArray to use to read from.
