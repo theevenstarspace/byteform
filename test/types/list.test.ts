@@ -1,15 +1,15 @@
-import { BufferWriter, BufferReader, List, f64 } from "../../src";
+import { ByteStreamWriter, ByteStreamReader, List, f64 } from "../../src";
 
 describe("List", () => {
   it("should write and read", () => {
-    const writer = new BufferWriter(1024);
+    const writer = new ByteStreamWriter(1024);
 
     const list = new List(f64);
-    list.write([1.5, 2.4, 3.6], writer);
+    list.write(writer, [1.5, 2.4, 3.6]);
 
     const buffer = writer.commit();
 
-    const reader = new BufferReader(buffer);
+    const reader = new ByteStreamReader(buffer);
 
     const value = list.read(reader);
 
@@ -17,14 +17,14 @@ describe("List", () => {
   });
 
   it("should write and read empty", () => {
-    const writer = new BufferWriter(1024);
+    const writer = new ByteStreamWriter(1024);
 
     const list = new List(f64);
-    list.write([], writer);
+    list.write(writer, []);
 
     const buffer = writer.commit();
 
-    const reader = new BufferReader(buffer);
+    const reader = new ByteStreamReader(buffer);
 
     const value = list.read(reader);
 
@@ -32,14 +32,14 @@ describe("List", () => {
   });
 
   it("should write and read nested", () => {
-    const writer = new BufferWriter(1024);
+    const writer = new ByteStreamWriter(1024);
 
     const list = new List(new List(f64));
-    list.write([[1.5, 2.4], [3.6]], writer);
+    list.write(writer, [[1.5, 2.4], [3.6]]);
 
     const buffer = writer.commit();
 
-    const reader = new BufferReader(buffer);
+    const reader = new ByteStreamReader(buffer);
 
     const value = list.read(reader);
 
@@ -47,14 +47,14 @@ describe("List", () => {
   });
 
   it("should write and read nested empty", () => {
-    const writer = new BufferWriter(1024);
+    const writer = new ByteStreamWriter(1024);
 
     const list = new List(new List(f64));
-    list.write([[], []], writer);
+    list.write(writer, [[], []]);
 
     const buffer = writer.commit();
 
-    const reader = new BufferReader(buffer);
+    const reader = new ByteStreamReader(buffer);
 
     const value = list.read(reader);
 
@@ -62,14 +62,14 @@ describe("List", () => {
   });
 
   it("should write and read nested mixed", () => {
-    const writer = new BufferWriter(1024);
+    const writer = new ByteStreamWriter(1024);
 
     const list = new List(new List(f64));
-    list.write([[1.5], []], writer);
+    list.write(writer, [[1.5], []]);
 
     const buffer = writer.commit();
 
-    const reader = new BufferReader(buffer);
+    const reader = new ByteStreamReader(buffer);
 
     const value = list.read(reader);
 
