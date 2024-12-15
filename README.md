@@ -45,7 +45,7 @@ yarn add @evenstar/byteform
 ### Create a Binary Structure
 
 ```typescript
-import { Struct, List, Text, u8, f32 } from '@evenstar/byteform';
+import { Struct, List, text, u8, f32 } from '@evenstar/byteform';
 
 const vec3 = new Struct({
   x: f32,
@@ -60,7 +60,7 @@ const bullet = new Struct({
 });
 
 const Player = new Struct({
-  name: new Text(32),
+  name: text,
   level: u8,
   position: vec3,
   bullets: new List(bullet)
