@@ -21,20 +21,7 @@ const Decoder = new TextDecoder();
  * A type that represents a string of text.
  * @group Types
  */
-export class Text implements Schema<string> {
-  /**
-   * The intermediate buffer to store the encoded string before writing it to the buffer.
-   */
-  private stringBuffer: Uint8Array;
-
-  /**
-   * Creates a new text type.
-   * @param maxByteLength - The maximum byte length of the encoded string
-   */
-  public constructor(maxByteLength: number = 256) {
-    this.stringBuffer = new Uint8Array(maxByteLength);
-  }
-
+class Text implements Schema<string> {
   /**
    * Writes the string to the buffer.
    * @param writer - The buffer writer.
