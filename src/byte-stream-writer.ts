@@ -92,7 +92,7 @@ const validateBuffer = (buffer: ArrayBufferLike): ArrayBuffer => {
 
 /**
  * A class that provides methods for writing binary data to a buffer.
- * @group Encoding
+ * @group Streams
  */
 export class ByteStreamWriter extends ByteStream {
   /**

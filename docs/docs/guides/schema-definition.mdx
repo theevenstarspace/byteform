@@ -148,39 +148,9 @@ The constructor takes a single argument, which is the type of elements in the li
 
 ***
 
-## Text
+## Text Types
 
-[Text](/api/classes/Text.md) is a string of characters. It's a synonym for a JavaScript string.
-
-Text is used to represent strings of characters. Text has a maximum length.
-
-The constructor takes a single argument, which is the maximum byte length of the text.
-
-```typescript
-import { Text } from '@evenstar/byteform';
-
-const schema = new Text(32);
-```
-
-### Max Byte Length
-
-For performance reasons, Text type was designed to have a maximum byte length. If you try to encode a string that exceeds the maximum byte length, an error will be thrown.
-
-You are allowed to encode a string that is shorter than the maximum byte length. In this case, only written bytes will be used.
-
-You can also set the maximum byte length manually by providing it as a first argument to the constructor.
-
-```typescript
-import { Text } from '@evenstar/byteform';
-
-const schema = new Text(4098); // Max 4KB
-```
-
-You can read [here](https://developer.mozilla.org/docs/Web/API/TextEncoder/encodeInto#buffer_sizing) about how to determine the maximum byte length for a given string.
-
-### text
-
-Byteform also provides a shorthand for `new Text(256)`.
+Byteform provides a [text](api/variables/text.md) schema type to represent text data. It's a synonym for a JavaScript string.
 
 ```typescript
 import { text } from '@evenstar/byteform';
@@ -196,18 +166,18 @@ Byteform provides an extensive set of number types.
 
 ### Shortcuts
 
-|Type |Description                              |Size in bytes|Value Range              |
-|-----|-----------------------------------------|-------------|-------------------------|
-|u8   |Unsigned 8-bit integer                   |1            |0 to 255                 |
-|u16  |Unsigned 16-bit big-endian integer       |2            |0 to 65535               |
-|u32  |Unsigned 32-bit big-endian integer       |4            |0 to 4294967295          |
-|u64  |Unsigned 64-bit big-endian integer       |8            |0 to 2^264 - 1           |
-|i8   |Signed 8-bit integer                     |1            |-128 to 127              |
-|i16  |Signed 16-bit big-endian integer         |2            |-32768 to 32767          |
-|i32  |Signed 32-bit big-endian integer         |4            |-2147483648 to 2147483647|
-|i64  |Signed 64-bit big-endian integer         |8            |-2^63 to 2^63 - 1        |
-|f32  |32-bit floating point big-endian number  |4            |-3.4e38 to 3.4e38        |
-|f64  |64-bit floating point big-endian number  |8            |-1.8e308 to 1.8e308      |
+|Type |Description                                    |Size in bytes|Value Range              |
+|-----|-----------------------------------------------|-------------|-------------------------|
+|u8   |Unsigned 8-bit integer                         |1            |0 to 255                 |
+|u16  |Unsigned 16-bit little-endian integer          |2            |0 to 65535               |
+|u32  |Unsigned 32-bit little-endian integer          |4            |0 to 4294967295          |
+|u64  |Unsigned 64-bit little-endian integer          |8            |0 to 2^264 - 1           |
+|i8   |Signed 8-bit integer                           |1            |-128 to 127              |
+|i16  |Signed 16-bit little-endian integer            |2            |-32768 to 32767          |
+|i32  |Signed 32-bit little-endian integer            |4            |-2147483648 to 2147483647|
+|i64  |Signed 64-bit little-endian integer            |8            |-2^63 to 2^63 - 1        |
+|f32  |32-bit floating point little-endian number     |4            |-3.4e38 to 3.4e38        |
+|f64  |64-bit floating point little-endian number     |8            |-1.8e308 to 1.8e308      |
 
 ### Endianness
 
