@@ -98,7 +98,7 @@ export class ByteStreamWriter extends ByteStream {
   /**
    * The underlying buffer.
    */
-  protected override _buffer: ArrayBuffer;
+  protected declare _buffer: ArrayBuffer;
 
   /**
    * The options for buffer resizing.
