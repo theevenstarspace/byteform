@@ -82,11 +82,24 @@ const defaultOptions: ResizeOptions = {
   increment: 256
 };
 
+const validateBuffer = (buffer: ArrayBufferLike): ArrayBuffer => {
+  if (SharedArrayBuffer && buffer instanceof SharedArrayBuffer) {
+    throw new TypeError('SharedArrayBuffer writing is not supported');
+  }
+
+  return buffer as ArrayBuffer;
+};
+
 /**
  * A class that provides methods for writing binary data to a buffer.
  * @group Encoding
  */
 export class ByteStreamWriter extends ByteStream {
+  /**
+   * The underlying buffer.
+   */
+  protected override _buffer: ArrayBuffer;
+
   /**
    * The options for buffer resizing.
    */
@@ -110,7 +123,7 @@ export class ByteStreamWriter extends ByteStream {
    * @param buffer - The buffer to write to
    * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the initial buffer size is invalid or the maxByteLength is less than the initial buffer size
    */
-  public constructor(buffer: ArrayBuffer);
+  public constructor(buffer: ArrayBufferLike);
 
   /**
    * Creates a new buffer writer.
@@ -119,7 +132,7 @@ export class ByteStreamWriter extends ByteStream {
    */
   public constructor(typedArray: TypedArray);
 
-  public constructor(target: number | ArrayBuffer | TypedArray, options: Partial<ResizeOptions> = {}) {
+  public constructor(target: number | ArrayBufferLike | TypedArray, options: Partial<ResizeOptions> = {}) {
     const targetOptions = { ...defaultOptions, ...options };
 
     if (typeof target === 'number') {
@@ -133,9 +146,9 @@ export class ByteStreamWriter extends ByteStream {
 
       super(buffer);
     } else if (ArrayBuffer.isView(target)) {
-      super(target as TypedArray);
+      super(validateBuffer(target.buffer));
     } else {
-      super(target as ArrayBuffer);
+      super(validateBuffer(target));
     }
 
     this._options = targetOptions;
@@ -163,6 +176,13 @@ export class ByteStreamWriter extends ByteStream {
       this._resizeFn(this._buffer, this._options);
     }
   };
+
+  /**
+   * Returns the underlying buffer
+   */
+  public override get buffer(): ArrayBuffer {
+    return this._buffer;
+  }
 
   /**
    * The current capacity of the buffer.
