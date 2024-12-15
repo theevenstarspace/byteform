@@ -1,6 +1,6 @@
 {
   "name": "@evenstar/byteform-benchmark",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Byteform benchmark space",
   "main": "src/index.ts",
   "scripts": {
