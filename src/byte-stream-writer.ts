@@ -1,4 +1,6 @@
-import { BufferView } from "./buffer-view";
+import { ByteStream } from "./byte-stream";
+import type { TypedArray } from "./byte-stream";
+import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
 /**
  * The resize strategy for buffer resizing.
@@ -80,11 +82,24 @@ const defaultOptions: ResizeOptions = {
   increment: 256
 };
 
+const validateBuffer = (buffer: ArrayBufferLike): ArrayBuffer => {
+  if (SharedArrayBuffer && buffer instanceof SharedArrayBuffer) {
+    throw new TypeError('SharedArrayBuffer writing is not supported');
+  }
+
+  return buffer as ArrayBuffer;
+};
+
 /**
  * A class that provides methods for writing binary data to a buffer.
- * @group Encoding
+ * @group Streams
  */
-export class BufferWriter extends BufferView {
+export class ByteStreamWriter extends ByteStream {
+  /**
+   * The underlying buffer.
+   */
+  protected declare _buffer: ArrayBuffer;
+
   /**
    * The options for buffer resizing.
    */
@@ -101,15 +116,40 @@ export class BufferWriter extends BufferView {
    * @param options - The options for buffer resizing
    * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the initial buffer size is invalid or the maxByteLength is less than the initial buffer size
    */
-  public constructor(byteLength: number, options: Partial<ResizeOptions> = {}) {
-    if (byteLength <= 0) {
-      throw new Error(`Invalid initial buffer size: ${byteLength}`);
-    }
+  public constructor(byteLength: number, options?: Partial<ResizeOptions>);
 
+  /**
+   * Creates a new buffer writer.
+   * @param buffer - The buffer to write to
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the initial buffer size is invalid or the maxByteLength is less than the initial buffer size
+   */
+  public constructor(buffer: ArrayBufferLike);
+
+  /**
+   * Creates a new buffer writer.
+   * @param typedArray - The TypedArray to use an underlying buffer for writing
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the initial buffer size is invalid or the maxByteLength is less than the initial buffer size
+   */
+  public constructor(typedArray: TypedArray);
+
+  public constructor(target: number | ArrayBufferLike | TypedArray, options: Partial<ResizeOptions> = {}) {
     const targetOptions = { ...defaultOptions, ...options };
-    const buffer = new ArrayBuffer(byteLength, { maxByteLength: targetOptions.maxByteLength });
 
-    super(buffer);
+    if (typeof target === 'number') {
+      const byteLength = target;
+
+      if (byteLength <= 0) {
+        throw new Error(`Invalid initial buffer size: ${byteLength}`);
+      }
+
+      const buffer = new ArrayBuffer(byteLength, { maxByteLength: targetOptions.maxByteLength });
+
+      super(buffer);
+    } else if (ArrayBuffer.isView(target)) {
+      super(validateBuffer(target.buffer));
+    } else {
+      super(validateBuffer(target));
+    }
 
     this._options = targetOptions;
     this._resizeFn = ResizeStrategies[targetOptions.strategy];
@@ -120,8 +160,8 @@ export class BufferWriter extends BufferView {
    * @param byteLength - The number of bytes to reserve
    * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the buffer is not resizable and the reserved space exceeds the buffer capacity
    */
-  protected reserve(byteLength: number): void {
-    if (this.remaining < byteLength) {
+  public reserve(byteLength: number): void {
+    while (this.remaining < byteLength) {
       if (!this._buffer.resizable) {
         const expectedByteLength = this._offset + byteLength;
         // Range error since this function is only called during writing to the buffer
@@ -136,6 +176,13 @@ export class BufferWriter extends BufferView {
       this._resizeFn(this._buffer, this._options);
     }
   };
+
+  /**
+   * Returns the underlying buffer
+   */
+  public override get buffer(): ArrayBuffer {
+    return this._buffer;
+  }
 
   /**
    * The current capacity of the buffer.
@@ -160,17 +207,9 @@ export class BufferWriter extends BufferView {
 
   /**
    * Commits the buffer.
-   * @returns The ArrayBuffer containing the written data
-   */
-  public commit(): ArrayBuffer {
-    return this._buffer.slice(0, this._offset);
-  }
-
-  /**
-   * Commits the buffer as a Uint8Array.
    * @returns The Uint8Array containing the written data
    */
-  public commitUint8Array(): Uint8Array {
+  public commit(): Uint8Array<ArrayBuffer> {
     return this._u8.slice(0, this._offset);
   }
 
@@ -178,7 +217,7 @@ export class BufferWriter extends BufferView {
    * Converts the buffer to a Uint8Array.
    * @returns The Uint8Array containing the written data
    */
-  public toUint8Array(): Uint8Array {
+  public toUint8Array(): Uint8Array<ArrayBuffer> {
     return new Uint8Array(this._buffer, 0, this._offset);
   }
 
@@ -312,5 +351,15 @@ export class BufferWriter extends BufferView {
     for (let i = 0; i < length; i++) {
       this._u8[this._offset++] = src[i];
     }
+  }
+
+  /**
+   * Writes a schema to the buffer.
+   * @param schema - The schema to write
+   * @param value - The schema value to write
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if buffer is full and not resizable or has reached its maximum capacity
+   */
+  public writeSchema<T extends SchemaLike>(schema: T, value: InferSchemaType<T>): void {
+    schema.write(this, value);
   }
 }

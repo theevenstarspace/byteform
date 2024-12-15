@@ -4,16 +4,16 @@ Byteform allows you to create custom data types. This is useful when you need to
 
 There is two ways to create a custom data type:
 
-## Using `createType`
+## Using `createSchema`
 
-You can create a custom data type using the `createType` function.
+You can create a custom data type using the `createSchema` function.
 
-This function takes a single argument, which is an object that implements [BaseType](/api/interfaces/BaseType.md) interface.
+This function takes a single argument, which is an object that implements [Schema](/api/type-aliases/Schema.md) interface.
 
 Here is an example of how to create a custom data type that is able to encode and decode a vector of numbers:
 
 ```typescript
-import { createType, BaseType } from '@evenstar/byteform';
+import { createSchema } from '@evenstar/byteform';
 
 interface Vector3 {
   x: number;
@@ -21,7 +21,7 @@ interface Vector3 {
   z: number;
 }
 
-const vector3 = createType<Vector3>({
+const vector3 = createSchema<Vector3>({
   write(value, writer) {
     writer.writeFloat32(value.x);
     writer.writeFloat32(value.y);
@@ -36,20 +36,20 @@ const vector3 = createType<Vector3>({
   },
 });
 
-encoder.encode(vector3, { x: 1, y: 2, z: 3 }); // OK
-encoder.encode(vector3, { x: 1, y: 2 }); // TypeError: property z is missing
+encoder.writeSchema(vector3, { x: 1, y: 2, z: 3 }); // OK
+encoder.writeSchema(vector3, { x: 1, y: 2 }); // TypeError: property z is missing
 
-const data = decoder.decode(vector3); // { x: 1, y: 2, z: 3 }
+const data = decoder.readSchema(vector3); // { x: 1, y: 2, z: 3 }
 ```
 
-## Implementing `BaseType` interface
+## Implementing `Schema` interface
 
-The second way to create a custom data type is to implement the [BaseType](/api/interfaces/BaseType.md) interface.
+The second way to create a custom data type is to implement the [Schema](/api/type-aliases/Schema.md) interface.
 
 Let's create a custom data type that is able to encode and decode a vector of numbers:
 
 ```typescript
-import { BaseType } from '@evenstar/byteform';
+import { Schema } from '@evenstar/byteform';
 
 interface Vector3 {
   x: number;
@@ -57,7 +57,7 @@ interface Vector3 {
   z: number;
 }
 
-class Vector3Type implements BaseType<Vector3> {
+class Vector3Type implements Schema<Vector3> {
   write(value, writer) {
     writer.writeFloat32(value.x);
     writer.writeFloat32(value.y);
@@ -75,8 +75,8 @@ class Vector3Type implements BaseType<Vector3> {
 
 const vector3 = new Vector3Type();
 
-encoder.encode(vector3, { x: 1, y: 2, z: 3 }); // OK
-encoder.encode(vector3, { x: 1, y: 2 }); // TypeError: property z is missing
+encoder.writeSchema(vector3, { x: 1, y: 2, z: 3 }); // OK
+encoder.writeSchema(vector3, { x: 1, y: 2 }); // TypeError: property z is missing
 
-const data = decoder.decode(vector3); // { x: 1, y: 2, z: 3 }
+const data = decoder.readSchema(vector3); // { x: 1, y: 2, z: 3 }
 ```

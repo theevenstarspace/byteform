@@ -1,8 +1,8 @@
 import benny from 'benny';
 import msgpack from 'msgpack-lite';
 import { BSON } from 'bson';
-import { BinaryEncoder, f32, List, Struct, text } from '@evenstar/byteform';
-import { getOptions } from './utils';
+import { ByteStreamWriter, f32, List, Struct, text } from '@evenstar/byteform';
+import { cleanup, getOptions } from '../utils';
 import type { Summary } from 'benny/lib/internal/common-types';
 import { encodePlayerFlatbuffer } from './flatbuffers/encode';
 
@@ -23,7 +23,7 @@ export const PlayerEncoding = (): Promise<Summary> => benny.suite(
     });
 
     /** CREATE ENCODER **/
-    const encoder = BinaryEncoder.create(128);
+    const encoder = new ByteStreamWriter(128);
 
     /** CYCLE FUNCTION **/
     return (): void => {
@@ -31,7 +31,7 @@ export const PlayerEncoding = (): Promise<Summary> => benny.suite(
       encoder.reset();
 
       // Encode the player object
-      encoder.encode(player, {
+      encoder.writeSchema(player, {
         name: 'Player',
         position: { x: 1, y: 2, z: 3 },
         rotation: 0,
@@ -42,7 +42,7 @@ export const PlayerEncoding = (): Promise<Summary> => benny.suite(
       });
 
       // Commit the encoded data to a Uint8Array
-      encoder.commitUint8Array();
+      encoder.commit();
     };
   }),
 
@@ -88,7 +88,7 @@ export const PlayerEncoding = (): Promise<Summary> => benny.suite(
   }),
 
   benny.cycle(),
-  benny.complete(),
+  benny.complete(cleanup),
 
-  benny.save(getOptions('player-encoding')),
+  benny.save(getOptions('byteform', 'player-encoding')),
 );
