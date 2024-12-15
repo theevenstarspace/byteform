@@ -1,4 +1,5 @@
-import { BufferView } from "./buffer-view";
+import { ByteStream } from "./byte-stream";
+import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
 /**
  * The resize strategy for buffer resizing.
@@ -84,7 +85,7 @@ const defaultOptions: ResizeOptions = {
  * A class that provides methods for writing binary data to a buffer.
  * @group Encoding
  */
-export class BufferWriter extends BufferView {
+export class ByteStreamWriter extends ByteStream {
   /**
    * The options for buffer resizing.
    */
@@ -312,5 +313,15 @@ export class BufferWriter extends BufferView {
     for (let i = 0; i < length; i++) {
       this._u8[this._offset++] = src[i];
     }
+  }
+
+  /**
+   * Writes a schema to the buffer.
+   * @param schema - The schema to write
+   * @param value - The schema value to write
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if buffer is full and not resizable or has reached its maximum capacity
+   */
+  public writeSchema<T extends SchemaLike>(schema: T, value: InferSchemaType<T>): void {
+    schema.write(this, value);
   }
 }

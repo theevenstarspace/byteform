@@ -2,7 +2,7 @@
  * Base class for reading and writing binary data.
  * @group Helpers
  */
-export class BufferView {
+export class ByteStream {
   /**
    * The underlying buffer.
    */
