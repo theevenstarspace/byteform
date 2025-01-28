@@ -1,19 +1,19 @@
 {
   "name": "String Decoding",
-  "date": "2024-12-15T17:15:48.943Z",
-  "version": "1.0.0",
+  "date": "2025-01-28T18:56:20.482Z",
+  "version": "1.0.1",
   "results": [
     {
       "name": "TextDecoder",
-      "ops": 9980192,
-      "margin": 0.84,
+      "ops": 14245088,
+      "margin": 0.81,
       "percentSlower": 0
     },
     {
       "name": "Manual utf8",
-      "ops": 4057171,
-      "margin": 1.17,
-      "percentSlower": 59.35
+      "ops": 4657845,
+      "margin": 0.41,
+      "percentSlower": 67.3
     }
   ],
   "fastest": {
