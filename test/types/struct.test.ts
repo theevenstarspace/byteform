@@ -14,7 +14,6 @@ const player = new Struct({
 });
 
 describe("Struct", () => {
-
   it("should write and read a struct", () => {
     const writer = new ByteStreamWriter(1024);
     player.write(writer, {

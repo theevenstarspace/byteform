@@ -213,6 +213,36 @@ describe("ByteStreamWriter", () => {
     expect(view.getUint8(2)).toBe(3);
   });
 
+  it("should write ArrayBuffer", () => {
+    const writer = new ByteStreamWriter(3);
+    writer.writeArrayBuffer(new ArrayBuffer(3));
+    const { buffer } = writer.commit();
+    const view = new DataView(buffer);
+    expect(view.byteLength).toBe(3);
+  });
+
+  it("should write ArrayBuffer with content", () => {
+    const writer = new ByteStreamWriter(3);
+    writer.writeArrayBuffer(new Uint8Array([1, 2, 3]).buffer);
+    const { buffer } = writer.commit();
+    const view = new DataView(buffer);
+    expect(view.getUint8(0)).toBe(1);
+    expect(view.getUint8(1)).toBe(2);
+    expect(view.getUint8(2)).toBe(3);
+  });
+
+  it("should write TypedArray", () => {
+    const writer = new ByteStreamWriter(6);
+    writer.writeTypedArray(new Uint16Array([1, 2, 3]));
+    const { buffer } = writer.commit();
+    const view = new DataView(buffer);
+
+    // Most platforms are little-endian, so we need to read the bytes in little-endian order
+    expect(view.getUint16(0, true)).toBe(1);
+    expect(view.getUint16(2, true)).toBe(2);
+    expect(view.getUint16(4, true)).toBe(3);
+  });
+
   it("should write bytes with optional byteLength", () => {
     const writer = new ByteStreamWriter(3);
     writer.writeBytes(new Uint8Array([1, 2, 3, 4, 5, 6]), 2);

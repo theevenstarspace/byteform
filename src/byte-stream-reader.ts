@@ -1,3 +1,4 @@
+import type { TypedArray, TypedArrayConstructor } from "./byte-stream";
 import { ByteStream } from "./byte-stream";
 import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
@@ -146,6 +147,26 @@ export class ByteStreamReader extends ByteStream {
     const value = new Uint8Array(this._buffer, this._offset, byteLength);
     this._offset += byteLength;
     return value;
+  }
+
+  /**
+   * Reads an ArrayBuffer from the buffer.
+   * @returns The read ArrayBuffer
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the buffer is out of bounds
+   */
+  public readArrayBuffer(byteLength: number): ArrayBuffer {
+    return this.readBytes(byteLength).buffer as ArrayBuffer;
+  }
+
+  /**
+   * Reads a TypedArray from the buffer.
+   * @param TypedArray - The TypedArray constructor to use
+   * @param elements - The number of elements to read
+   * @returns The read TypedArray
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the buffer is out of bounds
+   */
+  public readTypedArray<T extends TypedArray>(TypedArray: TypedArrayConstructor<T>, elements: number): T {
+    return new TypedArray(this.readArrayBuffer(TypedArray.BYTES_PER_ELEMENT * elements));
   }
 
   /**

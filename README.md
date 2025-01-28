@@ -6,6 +6,8 @@
 
 **Byteform** is a lightweight and versatile TypeScript library designed for encoding and decoding binary data. It provides an intuitive API to work with binary structures, making it an excellent choice for developers dealing with low-level data operations in both browser and Node.js environments.
 
+Documentation can be found at [byteform.js.org](https://byteform.js.org/).
+
 ## Table of contents
 1. [Why?](#why-byteform)
 2. [Features](#features)
