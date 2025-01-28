@@ -1,6 +1,6 @@
 import { ByteStreamWriter, ByteStreamReader, text } from "../../src";
 
-describe("Text Browser", () => {
+describe("Text", () => {
   it("should write and read a string", () => {
     const writer = new ByteStreamWriter(1024);
     text.write(writer, "Hello, World!");

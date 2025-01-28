@@ -11,6 +11,12 @@ export type TypedArray =
   | BigInt64Array
   | BigUint64Array;
 
+export interface TypedArrayConstructor<T extends TypedArray> {
+  new(length: number): T;
+  new(array: ArrayLike<number>): T;
+  new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): T;
+  BYTES_PER_ELEMENT: number;
+}
 
 /**
  * Base class for reading and writing binary data.

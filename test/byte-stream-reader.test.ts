@@ -104,4 +104,27 @@ describe("ByteStreamReader", () => {
     reader.seek(0);
     expect(reader.readBytesUnsafe(4).buffer).toBe(writer.buffer);
   });
+
+  it("should read ArrayBuffer", () => {
+    const writer = new ByteStreamWriter(4);
+    writer.writeArrayBuffer(new Uint8Array([1, 2, 3, 4]).buffer);
+
+    const reader = new ByteStreamReader(writer.buffer);
+    const result = reader.readArrayBuffer(4);
+
+    expect(result).toBeInstanceOf(ArrayBuffer);
+    expect(result.byteLength).toEqual(4);
+    expect(new Uint8Array(result)).toEqual(new Uint8Array([1, 2, 3, 4]));
+  });
+
+  it("should read TypedArray", () => {
+    const writer = new ByteStreamWriter(8);
+    writer.writeTypedArray(new Uint16Array([1, 2, 3, 4]));
+
+    const reader = new ByteStreamReader(writer.buffer);
+    const result = reader.readTypedArray(Uint16Array, 4);
+
+    expect(result).toBeInstanceOf(Uint16Array);
+    expect(result).toEqual(new Uint16Array([1, 2, 3, 4]));
+  });
 });

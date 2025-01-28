@@ -202,3 +202,33 @@ There are also endian-specific versions of the number types:
 |f64le |64-bit floating point    |little-endian|
 |f64be |64-bit floating point    |big-endian   |
 
+***
+
+## TypedArray Types
+
+Byteform provides a set of types for TypedArray data structures.
+
+|Type       |Description                                    |
+|-----------|-----------------------------------------------|
+|u8Array    |Unsigned 8-bit integer array                   |
+|u16Array   |Unsigned 16-bit little-endian integer          |
+|u32Array   |Unsigned 32-bit little-endian integer          |
+|u64Array   |Unsigned 64-bit little-endian integer          |
+|i8Array    |Signed 8-bit integer                           |
+|i16Array   |Signed 16-bit little-endian integer            |
+|i32Array   |Signed 32-bit little-endian integer            |
+|i64Array   |Signed 64-bit little-endian integer            |
+|f32Array   |32-bit floating point little-endian number     |
+|f64Array   |64-bit floating point little-endian number     |
+
+***
+
+## ArrayBuffer Types
+
+Byteform provides an [arrayBuffer](api/variables/arrayBuffer.md) schema type to represent ArrayBuffer data. It's a synonym for a JavaScript ArrayBuffer.
+
+```typescript
+import { arrayBuffer } from '@evenstar/byteform';
+
+const schema = arrayBuffer;
+```

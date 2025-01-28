@@ -341,7 +341,7 @@ export class ByteStreamWriter extends ByteStream {
 
   /**
    * Writes bytes to the buffer.
-   * @param src - The source buffer to write from
+   * @param src - The source buffer to write
    * @param byteLength - The number of bytes to write
    * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if buffer is full and not resizable or has reached its maximum capacity
    */
@@ -351,6 +351,24 @@ export class ByteStreamWriter extends ByteStream {
     for (let i = 0; i < length; i++) {
       this._u8[this._offset++] = src[i];
     }
+  }
+
+  /**
+   * Writes an ArrayBuffer to the buffer.
+   * @param value - The ArrayBuffer to write
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if buffer is full and not resizable or has reached its maximum capacity
+   */
+  public writeArrayBuffer(value: ArrayBuffer): void {
+    this.writeBytes(new Uint8Array(value));
+  }
+
+  /**
+   * Writes a TypedArray to the buffer.
+   * @param value - The TypedArray to write
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if buffer is full and not resizable or has reached its maximum capacity
+   */
+  public writeTypedArray<T extends TypedArray>(value: T): void {
+    this.writeBytes(new Uint8Array(value.buffer));
   }
 
   /**
