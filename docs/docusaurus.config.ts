@@ -1,3 +1,4 @@
+import codeImport from 'remark-code-import';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { themes as prismThemes } from 'prism-react-renderer';
@@ -104,7 +105,7 @@ const config: Config = {
           editUrl:
             'https://github.com/theevenstarspace/byteform/tree/main/docs/',
 
-          remarkPlugins: [remarkMath],
+          remarkPlugins: [remarkMath, codeImport],
           rehypePlugins: [rehypeKatex],
         },
         blog: false,

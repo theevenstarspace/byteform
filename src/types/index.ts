@@ -1,3 +1,4 @@
+export { InferSchemaType } from './schema-like';
 export * from './schema';
 export * from './numbers';
 export * from './text';

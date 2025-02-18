@@ -48,7 +48,6 @@ function HomepageHeader() {
 }
 
 export default function Home(): JSX.Element {
-  const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
       description="Library for encoding and decoding binary data with JavaScript and TypeScript for both Browser and Node.js"
