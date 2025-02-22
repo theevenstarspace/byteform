@@ -4,12 +4,8 @@ import { PlayerEncoding, PlayerDecoding } from './byteform';
 PlayerEncoding();
 PlayerDecoding();
 
+// We don't need to run those every time since they are related to the JS API and produce static results
 // BufferSlice();
+// SubArray();
 // StringEncoding();
 // StringDecoding();
-
-// import { PlayerDecoding } from './byteform';
-// // import { SubArray } from './js';
-
-// PlayerDecoding();
-// // SubArray();
