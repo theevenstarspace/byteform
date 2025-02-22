@@ -1,6 +1,6 @@
-import type { ByteStreamReader } from "../byte-stream-reader";
-import type { ByteStreamWriter } from "../byte-stream-writer";
-import type { Schema } from "./schema";
+import type { ByteStreamReader } from "../../byte-stream-reader";
+import type { ByteStreamWriter } from "../../byte-stream-writer";
+import type { Schema } from "../schema";
 
 type StructTypes<T> = {
   [K in keyof T]: Schema<T[K]>;

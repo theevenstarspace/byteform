@@ -1,0 +1,27 @@
+{
+  "name": "Sub Array",
+  "date": "2025-02-22T14:02:21.508Z",
+  "version": "1.0.1",
+  "results": [
+    {
+      "name": "new Uint8Array",
+      "ops": 72684133,
+      "margin": 1.54,
+      "percentSlower": 0
+    },
+    {
+      "name": "Uint8Array.subaray",
+      "ops": 46728885,
+      "margin": 1.08,
+      "percentSlower": 35.71
+    }
+  ],
+  "fastest": {
+    "name": "new Uint8Array",
+    "index": 0
+  },
+  "slowest": {
+    "name": "Uint8Array.subaray",
+    "index": 1
+  }
+}

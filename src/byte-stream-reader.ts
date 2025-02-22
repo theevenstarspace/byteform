@@ -2,11 +2,21 @@ import type { TypedArray, TypedArrayConstructor } from "./byte-stream";
 import { ByteStream } from "./byte-stream";
 import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
+// const textDecoder = new TextDecoder();
+
 /**
  * A class that provides methods to read data from a buffer.
  * @group Streams
  */
 export class ByteStreamReader extends ByteStream {
+  // private _textDecoder: TextDecoder;
+
+  // public constructor(...args: ConstructorParameters<typeof ByteStream>) {
+  //   super(...args);
+
+  //   this._textDecoder = new TextDecoder();
+  // }
+
   /**
    * Reads an unsigned 8-bit integer from the buffer.
    * @returns Read value
@@ -120,6 +130,69 @@ export class ByteStreamReader extends ByteStream {
     this._offset += 8;
     return value;
   }
+
+  // private findNullTerminatorOffset(byteLength?: number): number {
+  //   const end = this._offset + (byteLength ?? this._buffer.byteLength);
+  //   for (let i = this._offset; i < end; i++) {
+  //     if (this._u8[i] === 0) {
+  //       return i - this._offset;
+  //     }
+  //   }
+
+  //   return end - this._offset;
+  //   // return -1;
+  // }
+
+  public readString(byteLength?: number): string {
+    let result = '';
+    let position = this._offset;
+
+    const end = byteLength ? (position + byteLength) : this._buffer.byteLength;
+    const buffer = this._u8;
+
+    while (position <= end) {
+      const byte = buffer[position++];
+
+      if (byte === 0) {
+        break;
+      }
+
+      if (byte < 0x80) {
+        result += String.fromCharCode(byte);
+      } else if ((byte & 0xe0) === 0xc0) {
+        result += String.fromCharCode(((byte & 0x1f) << 6) | (buffer[position++] & 0x3f));
+      } else if ((byte & 0xf0) === 0xe0) {
+        result += String.fromCharCode(((byte & 0x0f) << 12) | ((buffer[position++] & 0x3f) << 6) | (buffer[position++] & 0x3f));
+      } else {
+        const surrogate = (((byte & 0x07) << 18) | ((buffer[position++] & 0x3f) << 12) | ((buffer[position++] & 0x3f) << 6) | (buffer[position++] & 0x3f)) - 0x10000;
+         
+        result += String.fromCharCode(0xd800 + (surrogate >> 10), 0xdc00 + (surrogate & 0x3ff));
+      }
+    }
+
+    if (byteLength) {
+      this._offset += byteLength;
+    } else {
+      this._offset = position;
+    }
+
+    return result;
+  }
+
+  // public readString(byteLength?: number): string {
+  //   const nullOffset = this.findNullTerminatorOffset(byteLength);
+  //   if (nullOffset < 1) {
+  //     throw new RangeError("Failed to read string: no null terminator found");
+  //   }
+  //   // if (stringEnd === -1) {
+  //   //   throw new RangeError("Failed to read string: no null terminator found");
+  //   // }
+
+  //   // const value = textDecoder.decode(this._u8.subarray(this._offset, this._offset + nullOffset));
+  //   const value = textDecoder.decode(new Uint8Array(this._buffer, this._offset, nullOffset));
+  //   this._offset += nullOffset + 1;
+  //   return value;
+  // }
 
   /**
    * Reads a set of bytes from the buffer.

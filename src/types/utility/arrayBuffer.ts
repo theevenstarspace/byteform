@@ -1,4 +1,4 @@
-import { createSchema } from "./schema";
+import { createSchema } from "../schema";
 
 /**
  * A type that represents an ArrayBuffer.

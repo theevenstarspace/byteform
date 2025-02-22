@@ -90,6 +90,8 @@ const validateBuffer = (buffer: ArrayBufferLike): ArrayBuffer => {
   return buffer as ArrayBuffer;
 };
 
+// const textEncoder = new TextEncoder();
+
 /**
  * A class that provides methods for writing binary data to a buffer.
  * @group Streams
@@ -337,6 +339,65 @@ export class ByteStreamWriter extends ByteStream {
     this.reserve(8);
     this._view.setFloat64(this._offset, value, littleEndian);
     this._offset += 8;
+  }
+
+  // public writeString(value: string, byteLength?: number): void {
+  //   const target = byteLength ? new Uint8Array(this._buffer, this._offset, byteLength) : this._u8;
+  //   const result = textEncoder.encodeInto(value, target);
+
+  //   if (result.read !== value.length) {
+  //     throw new RangeError(`Failed to encode string, the buffer is full, written ${result.read} symbols out of ${value.length}`);
+  //   }
+
+  //   this._offset += result.written;
+  //   this.writeUint8(0); // Null terminator
+  // }
+
+  public writeString(value: string, byteLength?: number): void {
+    const buffer = this._u8;
+    const strLength = value.length;
+
+    const limit = byteLength ? (this._offset + byteLength) : buffer.byteLength;
+    let position = this._offset;
+
+    for (let i = 0; i < strLength; i++) {
+      const char = value.charCodeAt(i);
+
+      if (char < 0x80) {
+        buffer[position++] = char;
+      } else if (char < 0x800) {
+        buffer[position++] = 0xc0 | (char >> 6);
+        buffer[position++] = 0x80 | (char & 0x3f);
+      } else if (char < 0xd800 || char >= 0xe000) {
+        buffer[position++] = 0xe0 | (char >> 12);
+        buffer[position++] = 0x80 | ((char >> 6) & 0x3f);
+        buffer[position++] = 0x80 | (char & 0x3f);
+      } else {
+        i++;
+        // Surrogate pair:
+        // UTF-16 encodes 0x10000-0x10FFFF by subtracting 0x10000 and
+        // splitting the 20 bits of 0x0-0xFFFFF into two halves
+        const surrogate = 0x10000 + (((char & 0x3ff) << 10) | (value.charCodeAt(i) & 0x3ff));
+        buffer[position++] = 0xf0 | (surrogate >> 18);
+        buffer[position++] = 0x80 | ((surrogate >> 12) & 0x3f);
+        buffer[position++] = 0x80 | ((surrogate >> 6) & 0x3f);
+        buffer[position++] = 0x80 | (surrogate & 0x3f);
+      }
+
+      if (position > limit) {
+        throw new RangeError(`Failed to write string, the buffer is full, written ${i} characters out of ${strLength}`);
+      }
+    }
+
+    if (position <= limit) {
+      buffer[position] = 0; // Null terminator
+    }
+
+    if (byteLength) {
+      this._offset += byteLength;
+    } else {
+      this._offset = position + 1;
+    }
   }
 
   /**

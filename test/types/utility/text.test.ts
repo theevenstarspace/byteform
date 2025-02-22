@@ -1,4 +1,6 @@
-import { ByteStreamWriter, ByteStreamReader, text } from "../../src";
+import { ByteStreamWriter, ByteStreamReader, bu } from "../../../src";
+
+const text = bu.text();
 
 describe("Text", () => {
   it("should write and read a string", () => {

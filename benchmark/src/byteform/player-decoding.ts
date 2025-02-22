@@ -1,7 +1,7 @@
 import benny from 'benny';
 import msgpack from 'msgpack-lite';
 import { BSON } from 'bson';
-import { ByteStreamReader, ByteStreamWriter, f32, List, Struct, text } from '@evenstar/byteform';
+import { ByteStreamReader, ByteStreamWriter, b, bu } from '@evenstar/byteform';
 import { cleanup, getOptions } from '../utils';
 import type { Summary } from 'benny/lib/internal/common-types';
 import { encodePlayerFlatbuffer } from './flatbuffers/encode';
@@ -12,15 +12,15 @@ export const PlayerDecoding = (): Promise<Summary> => benny.suite(
 
   benny.add('Byteform', () => {
     /** CREATE SCHEMAS **/
-    const vec3 = new Struct({ x: f32, y: f32, z: f32 });
+    const vec3 = b.struct({ x: b.f32(), y: b.f32(), z: b.f32() });
 
-    const bullet = new Struct({ position: vec3, velocity: vec3 });
+    const bullet = b.struct({ position: vec3, velocity: vec3 });
 
-    const player = new Struct({
-      name: text,
+    const player = b.struct({
+      name: b.cstr(8),
       position: vec3,
-      rotation: f32,
-      bullets: new List(bullet),
+      rotation: b.f32(),
+      bullets: bu.list(bullet),
     });
 
     /** CREATE ENCODER AND ENCODE PLAYER **/

@@ -1,14 +1,18 @@
-import {
-  ByteStreamWriter, ByteStreamReader,
-  u8Array, i8Array,
-  u16Array, i16Array,
-  u32Array, i32Array,
-  u64Array, i64Array,
-  f32Array, f64Array
-} from "../../src";
+import { ByteStreamWriter, ByteStreamReader, bu} from "../../../src";
 
 const CONTENT = [1, 2, 3, 4, 5, 6, 7, 8];
 const BI_CONTENT = [1n, 2n, 3n, 4n, 5n, 6n, 7n, 8n];
+
+const u8Array = bu.u8Array();
+const i8Array = bu.i8Array();
+const u16Array = bu.u16Array();
+const i16Array = bu.i16Array();
+const u32Array = bu.u32Array();
+const i32Array = bu.i32Array();
+const u64Array = bu.u64Array();
+const i64Array = bu.i64Array();
+const f32Array = bu.f32Array();
+const f64Array = bu.f64Array();
 
 describe("TypedArray", () => {
   it("should write and read an Uint8Array", () => {

@@ -1,6 +1,6 @@
-import type { ByteStreamReader } from "../byte-stream-reader";
-import type { ByteStreamWriter } from "../byte-stream-writer";
-import type { Schema } from "./schema";
+import type { ByteStreamReader } from "../../byte-stream-reader";
+import type { ByteStreamWriter } from "../../byte-stream-writer";
+import type { Schema } from "../schema";
 
 /**
  * A type that represents a list of items of a specific type. Similar to an array in JavaScript.

@@ -83,6 +83,34 @@ describe("ByteStreamReader", () => {
     expect(reader.readFloat64()).toBe(42.42);
   });
 
+  it("should read a string", () => {
+    const array = new Uint8Array([
+      72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 0,
+      128, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ]);
+
+    const reader = new ByteStreamReader(array.buffer);
+    const str = reader.readString();
+    const u8 = reader.readUint8();
+
+    expect(str).toBe("Hello World");
+    expect(u8).toBe(128);
+  });
+
+  it("should read a fixed string", () => {
+    const array = new Uint8Array([
+      72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 0,
+      128, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ]);
+
+    const reader = new ByteStreamReader(array.buffer);
+    const str = reader.readString(12);
+    const u8 = reader.readUint8();
+
+    expect(str).toBe("Hello World");
+    expect(u8).toBe(128);
+  });
+
   it("should read bytes", () => {
     const writer = new ByteStreamWriter(4);
     writer.writeUint32(42, true);

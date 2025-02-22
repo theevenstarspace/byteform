@@ -1,19 +1,37 @@
-import {
-  ByteStreamReader, ByteStreamWriter,
-
-  u8, i8,
-  u16le, u16be, i16le, i16be, u16, i16,
-  u32le, u32be, i32le, i32be, u32, i32,
-  u64le, u64be, i64le, i64be, u64, i64,
-  f32le, f32be, f32,
-  f64le, f64be, f64
-} from "../../src";
+import { ByteStreamReader, ByteStreamWriter, b } from "../../../src";
 
 const writer = new ByteStreamWriter(8);
 const reader = new ByteStreamReader(writer.buffer);
 
 const beginWrite = (): void => writer.seek(0);
 const beginRead = (): void => reader.seek(0);
+
+const u8 = b.u8();
+const i8 = b.i8();
+const u16le = b.u16le();
+const u16be = b.u16be();
+const i16le = b.i16le();
+const i16be = b.i16be();
+const u16 = b.u16();
+const i16 = b.i16();
+const u32le = b.u32le();
+const u32be = b.u32be();
+const i32le = b.i32le();
+const i32be = b.i32be();
+const u32 = b.u32();
+const i32 = b.i32();
+const u64le = b.u64le();
+const u64be = b.u64be();
+const i64le = b.i64le();
+const i64be = b.i64be();
+const u64 = b.u64();
+const i64 = b.i64();
+const f32le = b.f32le();
+const f32be = b.f32be();
+const f32 = b.f32();
+const f64le = b.f64le();
+const f64be = b.f64be();
+const f64 = b.f64();
 
 describe("Numbers", () => {
   it("should write and read an u8", () => {

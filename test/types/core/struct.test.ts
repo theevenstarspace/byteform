@@ -1,16 +1,16 @@
-import { ByteStreamWriter, ByteStreamReader, Struct, f64, u8, text } from "../../src";
+import { ByteStreamWriter, ByteStreamReader, b, bu } from "../../../src";
 
-const vec3 = new Struct({
-  x: f64,
-  y: f64,
-  z: f64,
+const vec3 = b.struct({
+  x: b.f64(),
+  y: b.f64(),
+  z: b.f64(),
 });
 
-const player = new Struct({
+const player = b.struct({
   position: vec3,
-  age: u8,
-  health: f64,
-  name: text,
+  age: b.u8(),
+  health: b.f64(),
+  name: bu.text(),
 });
 
 describe("Struct", () => {

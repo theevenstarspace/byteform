@@ -1,4 +1,6 @@
-import { ByteStreamWriter, ByteStreamReader, arrayBuffer } from "../../src";
+import { ByteStreamWriter, ByteStreamReader, bu } from "../../../src";
+
+const arrayBuffer = bu.arrayBuffer();
 
 describe("ArrayBuffer", () => {
   it("should write and read an ArrayBuffer", () => {

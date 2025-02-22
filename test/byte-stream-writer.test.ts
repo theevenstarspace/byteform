@@ -203,6 +203,30 @@ describe("ByteStreamWriter", () => {
     expect(view.getFloat64(0)).toBeCloseTo(42.42);
   });
 
+  it("should write a string", () => {
+    const writer = new ByteStreamWriter(24);
+    writer.writeString("Hello World"); // 11 bytes + 1 null terminator
+    writer.writeUint8(128);
+    const array = writer.commit();
+
+    expect([...array]).toEqual([
+      72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 0,
+      128
+    ]);
+  });
+
+  it("should write a fixed", () => {
+    const writer = new ByteStreamWriter(24);
+    writer.writeString("Hello World", 12); // 11 bytes + 1 null terminator
+    writer.writeUint8(128);
+    const array = writer.commit();
+
+    expect([...array]).toEqual([
+      72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 0,
+      128
+    ]);
+  });
+
   it("should write bytes", () => {
     const writer = new ByteStreamWriter(3);
     writer.writeBytes(new Uint8Array([1, 2, 3]));
