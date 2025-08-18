@@ -13,13 +13,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4 # Check out the repository code
+      - uses: actions/checkout@v4 # Check out the repository code
+      - name: Enable Corepack
+        run: corepack enable
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*' # Use the latest LTS version of Node.js
+          node-version: '22.x' # Use the latest LTS version of Node.js
           cache: 'yarn'         # Cache Yarn dependencies
 
       - name: Install dependencies
