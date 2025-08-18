@@ -7,7 +7,7 @@ import type { TypeDocOptions } from 'typedoc';
 import type { PluginOptions } from 'typedoc-plugin-markdown';
 import type * as Preset from '@docusaurus/preset-classic';
 
-import pkg from '../package.json';
+// import pkg from '../package.json';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -146,11 +146,11 @@ const config: Config = {
           label: 'Docs',
         },
         // { type: 'docsVersionDropdown', position: 'right' },
-        {
-          type: 'docsVersion',
-          position: 'right',
-          label: pkg.version
-        },
+        // {
+        //   type: 'docsVersion',
+        //   position: 'right',
+        //   label: pkg.version
+        // },
         {
           href: 'https://github.com/theevenstarspace/byteform',
           label: 'GitHub',
