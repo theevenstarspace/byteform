@@ -22,7 +22,7 @@ interface Vector3 {
 }
 
 const vector3 = createSchema<Vector3>({
-  write(value, writer) {
+  write(writer, value) {
     writer.writeFloat32(value.x);
     writer.writeFloat32(value.y);
     writer.writeFloat32(value.z);
@@ -49,7 +49,7 @@ The second way to create a custom data type is to implement the [Schema](/api/ty
 Let's create a custom data type that is able to encode and decode a vector of numbers:
 
 ```typescript
-import { Schema } from '@evenstar/byteform';
+import type { Schema, ByteStreamWriter, ByteStreamReader } from '@evenstar/byteform';
 
 interface Vector3 {
   x: number;
@@ -58,13 +58,13 @@ interface Vector3 {
 }
 
 class Vector3Type implements Schema<Vector3> {
-  write(value, writer) {
+  write(writer: ByteStreamWriter, value: Vector3) {
     writer.writeFloat32(value.x);
     writer.writeFloat32(value.y);
     writer.writeFloat32(value.z);
   }
 
-  read(reader) {
+  read(reader: ByteStreamReader): Vector3 {
     const x = reader.readFloat32();
     const y = reader.readFloat32();
     const z = reader.readFloat32();
