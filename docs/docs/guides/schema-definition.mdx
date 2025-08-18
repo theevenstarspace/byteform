@@ -148,6 +148,68 @@ The constructor takes a single argument, which is the type of elements in the li
 
 ***
 
+## Optional
+
+[Optional](/api/classes/Optional.md) is a wrapper type that can represent a value that may or may not be present. It's similar to the concept of `null` in JavaScript.
+
+The constructor takes a single argument, which is the type of elements in the list. There are a few examples of how to define an optional:
+
+<Tabs>
+  <TabItem value="simple" label="Simple" default>
+    ```typescript
+    import { Optional, Struct, f32 } from '@evenstar/byteform';
+
+    const vec3 = new Struct({
+      x: f32,
+      y: f32,
+      z: f32,
+    });
+
+    /**
+     * Define a schema with an optional vector3.
+     * Similar to JavaScript vec3 | null
+     */
+    const schema = new Optional(vec3);
+    ```
+  </TabItem>
+  <TabItem value="nested" label="Nested">
+    ```typescript
+    import { Optional, List, Struct, f32 } from '@evenstar/byteform';
+
+    const vec3 = new Struct({
+      x: f32,
+      y: f32,
+      z: f32,
+    });
+
+    /**
+     * Define a schema with a nested optional vector3.
+     * Similar to JavaScript array: [{x: 0, y: 1, z: 2}, null, null, {x: 3, y: 4, z: 5}]
+     */
+    const schema = new List(new Optional(vec3)); // Nested optional vector3
+    ```
+  </TabItem>
+  <TabItem value="typescript" label="With TypeScript">
+    ```typescript
+    import { Optional, Struct, f32 } from '@evenstar/byteform';
+
+    const vec3 = new Struct({
+      x: f32,
+      y: f32,
+      z: f32,
+    });
+
+    /**
+     * Validate the schema against the TypeScript type.
+     * If the schema definition does not match the TypeScript type, a type error will be thrown.
+     */
+    const names = new Optional<string>(vec3); // TypeError: Optional data type should implement vec3 | null encoding/decoding.
+    ```
+  </TabItem>
+</Tabs>
+
+***
+
 ## Text Types
 
 Byteform provides a [text](api/variables/text.md) schema type to represent text data. It's a synonym for a JavaScript string.
