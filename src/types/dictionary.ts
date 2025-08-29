@@ -4,18 +4,18 @@ import { u32 } from "./numbers";
 import type { Schema } from "./schema";
 
 /**
- * A type that represents a mapping of keys to values. Similar to a Map in JavaScript.
+ * A type that represents a dictionary of keys to values. Similar to a Map in JavaScript.
  * @group Types
  *
- * @typeParam K - The type of the keys in the mapping.
- * @typeParam V - The type of the values in the mapping.
+ * @typeParam K - The type of the keys in the dictionary.
+ * @typeParam V - The type of the values in the dictionary.
  */
-export class Mapping<K, V> implements Schema<Map<K, V>> {
+export class Dictionary<K, V> implements Schema<Map<K, V>> {
   /**
-   * Creates a new mapping type.
-   * @param keySchema - The schema for the keys in the mapping.
-   * @param valueSchema - The schema for the values in the mapping.
-   * @param sizeSchema - The schema for the size of the mapping.
+   * Creates a new dictionary type.
+   * @param keySchema - The schema for the keys in the dictionary.
+   * @param valueSchema - The schema for the values in the dictionary.
+   * @param sizeSchema - The schema for the size of the dictionary.
    */
   public constructor(
     private readonly keySchema: Schema<K>,

@@ -6,4 +6,4 @@ export * from "./struct";
 export * from "./optional";
 export * from "./typedArray";
 export * from "./arrayBuffer";
-export * from "./mapping";
+export * from "./dictionary";
