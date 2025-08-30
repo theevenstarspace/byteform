@@ -6,7 +6,7 @@ import type { InferSchemaType, SchemaLike } from "./types/schema-like";
  * The resize strategy for buffer resizing.
  * @group Other
  */
-export type ResizeStrategy = 'exponential' | 'additive' | 'hybrid';
+export type ResizeStrategy = "exponential" | "additive" | "hybrid";
 
 /**
  * The options for buffer resizing.
@@ -47,7 +47,10 @@ type ResizeFn = (buffer: ArrayBuffer, options: ResizeOptions) => void;
  * The exponential resizing strategy.
  */
 const ExponentialResize: ResizeFn = (buffer, { factor }) => {
-  const newByteLength = Math.min(Math.round(buffer.byteLength * factor), buffer.maxByteLength);
+  const newByteLength = Math.min(
+    Math.round(buffer.byteLength * factor),
+    buffer.maxByteLength
+  );
   buffer.resize(newByteLength);
 };
 
@@ -55,7 +58,10 @@ const ExponentialResize: ResizeFn = (buffer, { factor }) => {
  * The additive resizing strategy.
  */
 const AdditiveResize: ResizeFn = (buffer, { increment }) => {
-  const newByteLength = Math.min(buffer.byteLength + increment, buffer.maxByteLength);
+  const newByteLength = Math.min(
+    buffer.byteLength + increment,
+    buffer.maxByteLength
+  );
   buffer.resize(newByteLength);
 };
 
@@ -63,28 +69,32 @@ const AdditiveResize: ResizeFn = (buffer, { increment }) => {
  * The hybrid resizing strategy.
  */
 const HybridResize: ResizeFn = (buffer, { factor, increment }) => {
-  const newByteLength = Math.min(buffer.byteLength + Math.max(increment, Math.round(buffer.byteLength * (factor - 1))), buffer.maxByteLength);
+  const newByteLength = Math.min(
+    buffer.byteLength +
+      Math.max(increment, Math.round(buffer.byteLength * (factor - 1))),
+    buffer.maxByteLength
+  );
   buffer.resize(newByteLength);
 };
 
 const ResizeStrategies: Record<ResizeStrategy, ResizeFn> = {
   exponential: ExponentialResize,
   additive: AdditiveResize,
-  hybrid: HybridResize
+  hybrid: HybridResize,
 };
 
 /**
  * The default options for buffer resizing.
  */
 const defaultOptions: ResizeOptions = {
-  strategy: 'exponential',
+  strategy: "exponential",
   factor: 2,
-  increment: 256
+  increment: 256,
 };
 
 const validateBuffer = (buffer: ArrayBufferLike): ArrayBuffer => {
   if (SharedArrayBuffer && buffer instanceof SharedArrayBuffer) {
-    throw new TypeError('SharedArrayBuffer writing is not supported');
+    throw new TypeError("SharedArrayBuffer writing is not supported");
   }
 
   return buffer as ArrayBuffer;
@@ -132,17 +142,22 @@ export class ByteStreamWriter extends ByteStream {
    */
   public constructor(typedArray: TypedArray);
 
-  public constructor(target: number | ArrayBufferLike | TypedArray, options: Partial<ResizeOptions> = {}) {
+  public constructor(
+    target: number | ArrayBufferLike | TypedArray,
+    options: Partial<ResizeOptions> = {}
+  ) {
     const targetOptions = { ...defaultOptions, ...options };
 
-    if (typeof target === 'number') {
+    if (typeof target === "number") {
       const byteLength = target;
 
       if (byteLength <= 0) {
         throw new Error(`Invalid initial buffer size: ${byteLength}`);
       }
 
-      const buffer = new ArrayBuffer(byteLength, { maxByteLength: targetOptions.maxByteLength });
+      const buffer = new ArrayBuffer(byteLength, {
+        maxByteLength: targetOptions.maxByteLength,
+      });
 
       super(buffer);
     } else if (ArrayBuffer.isView(target)) {
@@ -165,17 +180,21 @@ export class ByteStreamWriter extends ByteStream {
       if (!this._buffer.resizable) {
         const expectedByteLength = this._offset + byteLength;
         // Range error since this function is only called during writing to the buffer
-        throw new RangeError(`Buffer is not resizable. Expected ${expectedByteLength} bytes, got ${this._buffer.byteLength}`);
+        throw new RangeError(
+          `Buffer is not resizable. Expected ${expectedByteLength} bytes, got ${this._buffer.byteLength}`
+        );
       }
 
       if (this._buffer.byteLength === this._buffer.maxByteLength) {
         // Range error since this function is only called during writing to the buffer
-        throw new RangeError(`Buffer has reached its maximum capacity of ${this._buffer.maxByteLength} bytes`);
+        throw new RangeError(
+          `Buffer has reached its maximum capacity of ${this._buffer.maxByteLength} bytes`
+        );
       }
 
       this._resizeFn(this._buffer, this._options);
     }
-  };
+  }
 
   /**
    * Returns the underlying buffer
@@ -377,7 +396,10 @@ export class ByteStreamWriter extends ByteStream {
    * @param value - The schema value to write
    * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if buffer is full and not resizable or has reached its maximum capacity
    */
-  public writeSchema<T extends SchemaLike>(schema: T, value: InferSchemaType<T>): void {
+  public writeSchema<T extends SchemaLike>(
+    schema: T,
+    value: InferSchemaType<T>
+  ): void {
     schema.write(this, value);
   }
 }
