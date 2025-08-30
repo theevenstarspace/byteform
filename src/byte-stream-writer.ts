@@ -3,6 +3,11 @@ import type { TypedArray } from "./byte-stream";
 import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
 /**
+ * TextEncoder instance to encode strings to bytes.
+ */
+const Encoder = new TextEncoder();
+
+/**
  * The resize strategy for buffer resizing.
  * @group Other
  */
@@ -390,6 +395,17 @@ export class ByteStreamWriter extends ByteStream {
     this.reserve(byteLength);
 
     const buffer = new Uint8Array(this.buffer, this._offset, byteLength);
+
+    // If buffer is not resizable, we can write directly
+    if (!this._buffer.resizable) {
+      const { written } = Encoder.encodeInto(value, buffer);
+      this._u8.fill(0, this._offset + written, this._offset + byteLength);
+      this.skip(byteLength);
+
+      return written;
+    }
+
+    // Otherwise, we need to perform manual encoding
 
     let offset = 0;
     let index = 0;

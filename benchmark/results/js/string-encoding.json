@@ -1,31 +1,31 @@
 {
   "name": "String Encoding",
-  "date": "2025-08-30T12:28:18.512Z",
+  "date": "2025-08-30T13:39:07.825Z",
   "version": "1.0.1",
   "results": [
     {
       "name": "TextEncoder Direct",
-      "ops": 20480462,
-      "margin": 0.56,
+      "ops": 19542837,
+      "margin": 0.88,
       "percentSlower": 0
     },
     {
       "name": "TextEncoder Indirect (Set)",
-      "ops": 3597887,
-      "margin": 0.33,
-      "percentSlower": 82.43
+      "ops": 3506095,
+      "margin": 0.63,
+      "percentSlower": 82.06
     },
     {
       "name": "TextEncoder Indirect (Manual)",
-      "ops": 2815912,
-      "margin": 0.58,
-      "percentSlower": 86.25
+      "ops": 2787973,
+      "margin": 0.52,
+      "percentSlower": 85.73
     },
     {
       "name": "Manual utf8",
-      "ops": 15288316,
-      "margin": 1.14,
-      "percentSlower": 25.35
+      "ops": 15130559,
+      "margin": 0.56,
+      "percentSlower": 22.58
     }
   ],
   "fastest": {
