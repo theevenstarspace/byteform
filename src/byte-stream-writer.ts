@@ -3,6 +3,11 @@ import type { TypedArray } from "./byte-stream";
 import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
 /**
+ * TextEncoder instance to encode strings to bytes.
+ */
+const Encoder = new TextEncoder();
+
+/**
  * The resize strategy for buffer resizing.
  * @group Other
  */
@@ -388,6 +393,86 @@ export class ByteStreamWriter extends ByteStream {
    */
   public writeTypedArray<T extends TypedArray>(value: T): void {
     this.writeBytes(new Uint8Array(value.buffer));
+  }
+
+  /**
+   * Writes a string to the buffer.
+   * @param value - The string to write
+   * @param byteLength - The number of bytes to write
+   * @returns The number of characters written
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if buffer is full and not resizable or has reached its maximum capacity
+   */
+  public writeString(value: string, byteLength: number): number {
+    if (byteLength <= 0) {
+      throw new RangeError(`Invalid byteLength: ${byteLength}. Expected a positive number.`);
+    }
+
+    if (!Number.isFinite(byteLength)) {
+      throw new RangeError(`Invalid byteLength: Infinity. Expected a finite number.`);
+    }
+
+    this.reserve(byteLength);
+
+    const buffer = new Uint8Array(this.buffer, this._offset, byteLength);
+
+    // If buffer is not resizable, we can write directly
+    if (!this._buffer.resizable) {
+      const { written } = Encoder.encodeInto(value, buffer);
+      this._u8.fill(0, this._offset + written, this._offset + byteLength);
+      this.skip(byteLength);
+
+      return written;
+    }
+
+    // Otherwise, we need to perform manual encoding
+
+    let offset = 0;
+    let index = 0;
+
+    while (index < value.length) {
+      const char = value.charCodeAt(index);
+
+      if (char < 0x80) {
+        if (offset + 1 > byteLength) break; // Prevent overflow
+
+        buffer[offset++] = char;
+      } else if (char < 0x800) {
+        if (offset + 2 > byteLength) break; // Prevent overflow
+
+        buffer[offset++] = 0xc0 | (char >> 6);
+        buffer[offset++] = 0x80 | (char & 0x3f);
+      } else if (char < 0xd800 || char >= 0xe000) {
+        if (offset + 3 > byteLength) break; // Prevent overflow
+
+
+        buffer[offset++] = 0xe0 | (char >> 12);
+        buffer[offset++] = 0x80 | ((char >> 6) & 0x3f);
+        buffer[offset++] = 0x80 | (char & 0x3f);
+      } else {
+        if (offset + 4 > byteLength) break; // Prevent overflow
+
+        index++;
+        // Surrogate pair:
+        // UTF-16 encodes 0x10000-0x10FFFF by subtracting 0x10000 and
+        // splitting the 20 bits of 0x0-0xFFFFF into two halves
+        const surrogate = 0x10000 + (((char & 0x3ff) << 10) | (value.charCodeAt(index) & 0x3ff));
+        buffer[offset++] = 0xf0 | (surrogate >> 18);
+        buffer[offset++] = 0x80 | ((surrogate >> 12) & 0x3f);
+        buffer[offset++] = 0x80 | ((surrogate >> 6) & 0x3f);
+        buffer[offset++] = 0x80 | (surrogate & 0x3f);
+      }
+
+      index++;
+    }
+
+    // Null-terminate, if necessary
+    if (offset < byteLength) {
+      buffer[offset++] = 0;
+    }
+
+    this.skip(byteLength);
+
+    return index;
   }
 
   /**
