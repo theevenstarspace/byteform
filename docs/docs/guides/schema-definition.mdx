@@ -298,9 +298,29 @@ The constructor takes a single argument, which is the type of elements in the li
 
 ***
 
-## Text Types
+## Str
 
-Byteform provides a [text](api/variables/text.md) schema type to represent text data. It's a synonym for a JavaScript string.
+[Str](/api/classes/Str.md) is a type that represents a fixed-length string. It's a synonym for a JavaScript string.
+
+The constructor takes a single argument, which is the byte length of the string. There are a few examples of how to define a fixed-length string:
+
+```typescript
+import { Str } from '@evenstar/byteform';
+
+const schema = new Str(5); // Fixed-length string of 5 bytes
+
+schema.write(writer, "Hello, World!"); // Writes -> Hello (5 bytes)
+schema.read(reader); // Reads -> Hello
+
+schema.write(writer, "Hi"); // Writes -> Hi\0 (2 bytes + null terminator)
+schema.read(reader); // Reads -> Hi
+```
+
+***
+
+## Text
+
+Byteform provides a [text](api/variables/text.md) schema type to represent a variable-length string. It's a synonym for a JavaScript string.
 
 ```typescript
 import { text } from '@evenstar/byteform';
