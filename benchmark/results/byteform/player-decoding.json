@@ -1,45 +1,51 @@
 {
   "name": "Player decoding",
-  "date": "2025-08-30T13:40:57.924Z",
+  "date": "2025-08-30T14:11:45.159Z",
   "version": "1.0.1",
   "results": [
     {
-      "name": "Byteform",
-      "ops": 1754698,
-      "margin": 0.4,
-      "percentSlower": 26.9
-    },
-    {
-      "name": "JSON",
-      "ops": 651132,
-      "margin": 0.34,
-      "percentSlower": 72.87
-    },
-    {
-      "name": "Msgpack-lite",
-      "ops": 178117,
-      "margin": 0.57,
-      "percentSlower": 92.58
-    },
-    {
-      "name": "Flatbuffers",
-      "ops": 2400262,
-      "margin": 0.5,
+      "name": "Byteform raw",
+      "ops": 4313156,
+      "margin": 0.67,
       "percentSlower": 0
     },
     {
+      "name": "Byteform",
+      "ops": 1760349,
+      "margin": 0.51,
+      "percentSlower": 59.19
+    },
+    {
+      "name": "JSON",
+      "ops": 654299,
+      "margin": 0.55,
+      "percentSlower": 84.83
+    },
+    {
+      "name": "Msgpack-lite",
+      "ops": 181759,
+      "margin": 0.56,
+      "percentSlower": 95.79
+    },
+    {
+      "name": "Flatbuffers",
+      "ops": 2502264,
+      "margin": 0.53,
+      "percentSlower": 41.99
+    },
+    {
       "name": "BSON",
-      "ops": 690404,
-      "margin": 0.58,
-      "percentSlower": 71.24
+      "ops": 685207,
+      "margin": 0.48,
+      "percentSlower": 84.11
     }
   ],
   "fastest": {
-    "name": "Flatbuffers",
-    "index": 3
+    "name": "Byteform raw",
+    "index": 0
   },
   "slowest": {
     "name": "Msgpack-lite",
-    "index": 2
+    "index": 3
   }
 }

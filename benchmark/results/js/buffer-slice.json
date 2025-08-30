@@ -1,18 +1,18 @@
 {
   "name": "Buffer Slice",
-  "date": "2025-08-30T13:38:46.045Z",
+  "date": "2025-08-30T14:01:00.223Z",
   "version": "1.0.1",
   "results": [
     {
       "name": "ArrayBuffer",
-      "ops": 2519106,
-      "margin": 1.75,
-      "percentSlower": 41.09
+      "ops": 2586328,
+      "margin": 0.97,
+      "percentSlower": 39.4
     },
     {
       "name": "Uint8Array",
-      "ops": 4276443,
-      "margin": 0.51,
+      "ops": 4267995,
+      "margin": 0.71,
       "percentSlower": 0
     }
   ],
