@@ -15,6 +15,10 @@ describe("uVarInt", () => {
     { value: 255, buffer: [0xff, 1] },
     { value: 256, buffer: [0x80, 2] },
     { value: 0xffff, buffer: [0xff, 0xff, 3] },
+    {
+      value: Number.MAX_SAFE_INTEGER,
+      buffer: [0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 15],
+    },
   ]) {
     it(`should encode ${value} as ${buffer}`, () => {
       const writer = new ByteStreamWriter(buffer.length);
@@ -45,6 +49,14 @@ describe("iVarInt", () => {
     { value: -255, buffer: [0x40 | 0x80 | 0x3f, 3] },
     { value: 0x7fff, buffer: [0x80 | 0x3f, 0xff, 3] },
     { value: -0x7fff, buffer: [0x40 | 0x80 | 0x3f, 0xff, 3] },
+    {
+      value: Number.MAX_SAFE_INTEGER,
+      buffer: [191, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 31],
+    },
+    {
+      value: Number.MIN_SAFE_INTEGER,
+      buffer: [0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 31],
+    },
   ]) {
     it(`should encode ${value} as ${buffer}`, () => {
       const writer = new ByteStreamWriter(buffer.length);

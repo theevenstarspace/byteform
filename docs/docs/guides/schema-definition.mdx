@@ -266,6 +266,59 @@ There are also endian-specific versions of the number types:
 
 ***
 
+## Varint Types
+
+Byteform provides variable-length integer types that use a base-128 encoding scheme. These types are useful for efficiently encoding integers that vary widely in size, as smaller values use fewer bytes.
+
+### uVarInt
+
+[`uVarInt`](/api/variables/uVarInt.md) represents an unsigned variable-length integer. It automatically determines the number of bytes needed based on the value's magnitude.
+
+```typescript
+import { uVarInt } from '@evenstar/byteform';
+
+const schema = uVarInt;
+```
+
+**Characteristics:**
+- **Encoding**: Base-128 with continuation bits
+- **Endianness**: Little-endian
+- **Range**: 0 to 2^53 - 1 (JavaScript Number.MAX_SAFE_INTEGER)
+- **Size**: Variable, typically 1-9 bytes depending on value
+
+**Example values and their byte representation:**
+- `0` → 1 byte: `[0x00]`
+- `127` → 1 byte: `[0x7f]`
+- `128` → 2 bytes: `[0x80, 0x01]`
+- `16383` → 2 bytes: `[0xff, 0x7f]`
+- `16384` → 3 bytes: `[0x80, 0x80, 0x01]`
+
+### iVarInt
+
+[`iVarInt`](/api/variables/iVarInt.md) represents a signed variable-length integer. It uses a similar encoding scheme but reserves one bit for the sign.
+
+```typescript
+import { iVarInt } from '@evenstar/byteform';
+
+const schema = iVarInt;
+```
+
+**Characteristics:**
+- **Encoding**: Base-128 with continuation bits and sign bit
+- **Endianness**: Little-endian by default
+- **Range**: −(2^53 − 1) (JavaScript Number.MIN_SAFE_INTEGER) to 2^53 - 1 (JavaScript Number.MAX_SAFE_INTEGER)
+- **Size**: Variable, typically 1-9 bytes depending on value
+
+**Example values and their byte representation:**
+- `0` → 1 byte: `[0x00]`
+- `-1` → 1 byte: `[0x41]`
+- `63` → 1 byte: `[0x3f]`
+- `-63` → 1 byte: `[0x7f]`
+- `64` → 2 bytes: `[0x80, 0x01]`
+- `-64` → 2 byte: `[0xc0, 0x01]`
+
+***
+
 ## TypedArray Types
 
 Byteform provides a set of types for TypedArray data structures.
