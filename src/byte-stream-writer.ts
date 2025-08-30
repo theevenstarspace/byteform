@@ -390,10 +390,10 @@ export class ByteStreamWriter extends ByteStream {
     this.reserve(byteLength);
 
     const buffer = new Uint8Array(this.buffer, this._offset, byteLength);
-    let offset = 0;
 
+    let offset = 0;
     let index = 0;
-    // for (let i = 0; i < value.length; i++) {
+
     while (index < value.length) {
       const char = value.charCodeAt(index);
 
