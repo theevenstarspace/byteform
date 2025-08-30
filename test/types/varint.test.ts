@@ -4,6 +4,7 @@ import {
   iVarInt,
   ByteStreamReader,
 } from "../../src";
+import { writeAndRead } from "./utils";
 
 describe("uVarInt", () => {
   for (const { value, buffer } of [
@@ -30,6 +31,10 @@ describe("uVarInt", () => {
       const reader = new ByteStreamReader(new Uint8Array(buffer));
       expect(uVarInt.read(reader)).toBe(value);
       expect(reader.position).toBe(buffer.length);
+    });
+    it(`should write and read ${value}`, () => {
+      const result = writeAndRead(uVarInt, value);
+      expect(result).toBe(value);
     });
   }
 });
@@ -68,6 +73,10 @@ describe("iVarInt", () => {
       const reader = new ByteStreamReader(new Uint8Array(buffer));
       expect(iVarInt.read(reader)).toBe(value);
       expect(reader.position).toBe(buffer.length);
+    });
+    it(`should write and read ${value}`, () => {
+      const result = writeAndRead(iVarInt, value);
+      expect(result).toBe(value);
     });
   }
 });

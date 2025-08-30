@@ -9,5 +9,8 @@ export function writeAndRead<T>(
   schema.write(writer, value);
   const buffer = writer.commit();
   const reader = new ByteStreamReader(buffer);
-  return schema.read(reader);
+  const result = schema.read(reader);
+  // make sure the reader has read the whole buffer
+  expect(reader.position).toBe(buffer.length);
+  return result;
 }
