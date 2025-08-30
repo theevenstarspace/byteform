@@ -3,15 +3,10 @@ import type { TypedArray } from "./byte-stream";
 import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
 /**
- * TextEncoder instance to encode strings to bytes.
- */
-const Encoder = new TextEncoder();
-
-/**
  * The resize strategy for buffer resizing.
  * @group Other
  */
-export type ResizeStrategy = "exponential" | "additive" | "hybrid";
+export type ResizeStrategy = 'exponential' | 'additive' | 'hybrid';
 
 /**
  * The options for buffer resizing.
@@ -52,10 +47,7 @@ type ResizeFn = (buffer: ArrayBuffer, options: ResizeOptions) => void;
  * The exponential resizing strategy.
  */
 const ExponentialResize: ResizeFn = (buffer, { factor }) => {
-  const newByteLength = Math.min(
-    Math.round(buffer.byteLength * factor),
-    buffer.maxByteLength
-  );
+  const newByteLength = Math.min(Math.round(buffer.byteLength * factor), buffer.maxByteLength);
   buffer.resize(newByteLength);
 };
 
@@ -63,10 +55,7 @@ const ExponentialResize: ResizeFn = (buffer, { factor }) => {
  * The additive resizing strategy.
  */
 const AdditiveResize: ResizeFn = (buffer, { increment }) => {
-  const newByteLength = Math.min(
-    buffer.byteLength + increment,
-    buffer.maxByteLength
-  );
+  const newByteLength = Math.min(buffer.byteLength + increment, buffer.maxByteLength);
   buffer.resize(newByteLength);
 };
 
@@ -74,32 +63,28 @@ const AdditiveResize: ResizeFn = (buffer, { increment }) => {
  * The hybrid resizing strategy.
  */
 const HybridResize: ResizeFn = (buffer, { factor, increment }) => {
-  const newByteLength = Math.min(
-    buffer.byteLength +
-      Math.max(increment, Math.round(buffer.byteLength * (factor - 1))),
-    buffer.maxByteLength
-  );
+  const newByteLength = Math.min(buffer.byteLength + Math.max(increment, Math.round(buffer.byteLength * (factor - 1))), buffer.maxByteLength);
   buffer.resize(newByteLength);
 };
 
 const ResizeStrategies: Record<ResizeStrategy, ResizeFn> = {
   exponential: ExponentialResize,
   additive: AdditiveResize,
-  hybrid: HybridResize,
+  hybrid: HybridResize
 };
 
 /**
  * The default options for buffer resizing.
  */
 const defaultOptions: ResizeOptions = {
-  strategy: "exponential",
+  strategy: 'exponential',
   factor: 2,
-  increment: 256,
+  increment: 256
 };
 
 const validateBuffer = (buffer: ArrayBufferLike): ArrayBuffer => {
   if (SharedArrayBuffer && buffer instanceof SharedArrayBuffer) {
-    throw new TypeError("SharedArrayBuffer writing is not supported");
+    throw new TypeError('SharedArrayBuffer writing is not supported');
   }
 
   return buffer as ArrayBuffer;
@@ -147,22 +132,17 @@ export class ByteStreamWriter extends ByteStream {
    */
   public constructor(typedArray: TypedArray);
 
-  public constructor(
-    target: number | ArrayBufferLike | TypedArray,
-    options: Partial<ResizeOptions> = {}
-  ) {
+  public constructor(target: number | ArrayBufferLike | TypedArray, options: Partial<ResizeOptions> = {}) {
     const targetOptions = { ...defaultOptions, ...options };
 
-    if (typeof target === "number") {
+    if (typeof target === 'number') {
       const byteLength = target;
 
       if (byteLength <= 0) {
         throw new Error(`Invalid initial buffer size: ${byteLength}`);
       }
 
-      const buffer = new ArrayBuffer(byteLength, {
-        maxByteLength: targetOptions.maxByteLength,
-      });
+      const buffer = new ArrayBuffer(byteLength, { maxByteLength: targetOptions.maxByteLength });
 
       super(buffer);
     } else if (ArrayBuffer.isView(target)) {
@@ -185,21 +165,17 @@ export class ByteStreamWriter extends ByteStream {
       if (!this._buffer.resizable) {
         const expectedByteLength = this._offset + byteLength;
         // Range error since this function is only called during writing to the buffer
-        throw new RangeError(
-          `Buffer is not resizable. Expected ${expectedByteLength} bytes, got ${this._buffer.byteLength}`
-        );
+        throw new RangeError(`Buffer is not resizable. Expected ${expectedByteLength} bytes, got ${this._buffer.byteLength}`);
       }
 
       if (this._buffer.byteLength === this._buffer.maxByteLength) {
         // Range error since this function is only called during writing to the buffer
-        throw new RangeError(
-          `Buffer has reached its maximum capacity of ${this._buffer.maxByteLength} bytes`
-        );
+        throw new RangeError(`Buffer has reached its maximum capacity of ${this._buffer.maxByteLength} bytes`);
       }
 
       this._resizeFn(this._buffer, this._options);
     }
-  }
+  };
 
   /**
    * Returns the underlying buffer
@@ -396,95 +372,12 @@ export class ByteStreamWriter extends ByteStream {
   }
 
   /**
-   * Writes a string to the buffer.
-   * @param value - The string to write
-   * @param byteLength - The number of bytes to write
-   * @returns The number of characters written
-   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if buffer is full and not resizable or has reached its maximum capacity
-   */
-  public writeString(value: string, byteLength: number): number {
-    if (byteLength <= 0) {
-      throw new RangeError(`Invalid byteLength: ${byteLength}. Expected a positive number.`);
-    }
-
-    if (!Number.isFinite(byteLength)) {
-      throw new RangeError(`Invalid byteLength: Infinity. Expected a finite number.`);
-    }
-
-    this.reserve(byteLength);
-
-    const buffer = new Uint8Array(this.buffer, this._offset, byteLength);
-
-    // If buffer is not resizable, we can write directly
-    if (!this._buffer.resizable) {
-      const { written } = Encoder.encodeInto(value, buffer);
-      this._u8.fill(0, this._offset + written, this._offset + byteLength);
-      this.skip(byteLength);
-
-      return written;
-    }
-
-    // Otherwise, we need to perform manual encoding
-
-    let offset = 0;
-    let index = 0;
-
-    while (index < value.length) {
-      const char = value.charCodeAt(index);
-
-      if (char < 0x80) {
-        if (offset + 1 > byteLength) break; // Prevent overflow
-
-        buffer[offset++] = char;
-      } else if (char < 0x800) {
-        if (offset + 2 > byteLength) break; // Prevent overflow
-
-        buffer[offset++] = 0xc0 | (char >> 6);
-        buffer[offset++] = 0x80 | (char & 0x3f);
-      } else if (char < 0xd800 || char >= 0xe000) {
-        if (offset + 3 > byteLength) break; // Prevent overflow
-
-
-        buffer[offset++] = 0xe0 | (char >> 12);
-        buffer[offset++] = 0x80 | ((char >> 6) & 0x3f);
-        buffer[offset++] = 0x80 | (char & 0x3f);
-      } else {
-        if (offset + 4 > byteLength) break; // Prevent overflow
-
-        index++;
-        // Surrogate pair:
-        // UTF-16 encodes 0x10000-0x10FFFF by subtracting 0x10000 and
-        // splitting the 20 bits of 0x0-0xFFFFF into two halves
-        const surrogate = 0x10000 + (((char & 0x3ff) << 10) | (value.charCodeAt(index) & 0x3ff));
-        buffer[offset++] = 0xf0 | (surrogate >> 18);
-        buffer[offset++] = 0x80 | ((surrogate >> 12) & 0x3f);
-        buffer[offset++] = 0x80 | ((surrogate >> 6) & 0x3f);
-        buffer[offset++] = 0x80 | (surrogate & 0x3f);
-      }
-
-      index++;
-    }
-
-    // Null-terminate, if necessary
-    if (offset < byteLength) {
-      buffer[offset++] = 0;
-    }
-
-    this.skip(byteLength);
-
-    return index;
-  }
-
-  /**
    * Writes a schema to the buffer.
    * @param schema - The schema to write
    * @param value - The schema value to write
    * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if buffer is full and not resizable or has reached its maximum capacity
    */
-  public writeSchema<T extends SchemaLike>(
-    schema: T,
-    value: InferSchemaType<T>
-  ): void {
+  public writeSchema<T extends SchemaLike>(schema: T, value: InferSchemaType<T>): void {
     schema.write(this, value);
   }
 }
