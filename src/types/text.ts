@@ -34,15 +34,27 @@ class Text implements Schema<string> {
       throw new RangeError(`Failed to write text: ${e.message}`);
     }
 
-    const res = Encoder.encodeInto(value, new Uint8Array(writer.buffer, writer.position + 4));
+    if (writer.buffer.resizable) {
+      /**
+       * We can't encode directly into a buffer.
+       * Browser will throw an error, because it's forbidden to encode a string into a resizable buffer.
+       * The solution is to encode the string into a separate buffer first.
+       * And then copy the encoded string into the original buffer.
+       */
+      const res = Encoder.encode(value);
+      writer.writeUint32(res.length); // Write the length of the encoded string
+      writer.writeBytes(res); // Write the encoded string
+    } else {
+      const res = Encoder.encodeInto(value, new Uint8Array(writer.buffer, writer.position + 4));
 
-    // This should never happen since we reserved enough space
-    // if (res.read !== value.length) {
-    //   throw new Error("Failed to encode text");
-    // }
+      // This should never happen since we reserved enough space
+      // if (res.read !== value.length) {
+      //   throw new Error("Failed to encode text");
+      // }
 
-    writer.writeUint32(res.written); // Write the length of the encoded string
-    writer.skip(res.written); // Skip the encoded string
+      writer.writeUint32(res.written); // Write the length of the encoded string
+      writer.skip(res.written); // Skip the encoded string
+    }
   }
 
   /**
