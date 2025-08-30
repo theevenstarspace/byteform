@@ -390,7 +390,6 @@ const schema = uVarInt;
 
 **Characteristics:**
 - **Encoding**: Base-128 with continuation bits
-- **Endianness**: Little-endian
 - **Range**: 0 to 2^53 - 1 (JavaScript Number.MAX_SAFE_INTEGER)
 - **Size**: Variable, typically 1-9 bytes depending on value
 
@@ -413,7 +412,6 @@ const schema = iVarInt;
 
 **Characteristics:**
 - **Encoding**: Base-128 with continuation bits and sign bit
-- **Endianness**: Little-endian by default
 - **Range**: −(2^53 − 1) (JavaScript Number.MIN_SAFE_INTEGER) to 2^53 - 1 (JavaScript Number.MAX_SAFE_INTEGER)
 - **Size**: Variable, typically 1-9 bytes depending on value
 
