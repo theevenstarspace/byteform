@@ -18,7 +18,7 @@ const Encoder = new TextEncoder();
 const Decoder = new TextDecoder();
 
 /**
- * A type that represents a string of text.
+ * A type that represents a variable-length string.
  * @group Types
  */
 class Text implements Schema<string> {

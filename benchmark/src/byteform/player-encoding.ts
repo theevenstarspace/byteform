@@ -1,7 +1,7 @@
 import benny from 'benny';
 import msgpack from 'msgpack-lite';
 import { BSON } from 'bson';
-import { ByteStreamWriter, f32, List, Struct, text } from '@evenstar/byteform';
+import { ByteStreamWriter, f32, List, Struct, Str } from '@evenstar/byteform';
 import { cleanup, getOptions } from '../utils';
 import type { Summary } from 'benny/lib/internal/common-types';
 import { encodePlayerFlatbuffer } from './flatbuffers/encode';
@@ -16,7 +16,7 @@ export const PlayerEncoding = (): Promise<Summary> => benny.suite(
     const bullet = new Struct({ position: vec3, velocity: vec3 });
 
     const player = new Struct({
-      name: text,
+      name: new Str(16),
       position: vec3,
       rotation: f32,
       bullets: new List(bullet),
