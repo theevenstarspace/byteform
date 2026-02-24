@@ -236,6 +236,55 @@ The constructor takes three arguments:
 
 ***
 
+## DiscriminatedUnion
+
+[DiscriminatedUnion](/api/classes/DiscriminatedUnion.md) is a type for storing values that can be one of several different shapes, identified by a common "discriminator" field. It's similar to a discriminated union in TypeScript.
+
+The constructor takes three arguments:
+- `discriminatorKey`: The name of the property that will hold the discriminator value.
+- `discriminatorSchema`: The schema used to encode/decode the discriminator value itself (e.g., `u8`, `text`).
+- `variants`: An array of tuples, where each tuple contains `[discriminatorValue, payloadSchema]`.
+
+<Tabs>
+  <TabItem value="simple" label="Simple" default>
+    ```typescript
+    import { DiscriminatedUnion, Struct, text, u8, f32 } from '@evenstar/byteform';
+
+    // Define schemas for each shape
+    const circle = new Struct({ radius: f32 });
+    const square = new Struct({ side: f32 });
+
+    /**
+     * Define a discriminated union where 'kind' determines the shape.
+     * Shape: { kind: 0, radius: 5.0 } OR { kind: 1, side: 10.0 }
+     */
+    const shapeSchema = new DiscriminatedUnion('kind', u8, [
+      [0, circle],
+      [1, square]
+    ]);
+    ```
+  </TabItem>
+  <TabItem value="string-discriminator" label="String Discriminator">
+    ```typescript
+    import { DiscriminatedUnion, Struct, text } from '@evenstar/byteform';
+
+    const user = new Struct({ username: text });
+    const admin = new Struct({ username: text, role: text });
+
+    /**
+     * Define a union using string literals as discriminators.
+     * Shape: { type: 'user', username: 'alice' }
+     */
+    const userSchema = new DiscriminatedUnion('type', text, [
+      ['user', user],
+      ['admin', admin]
+    ]);
+    ```
+  </TabItem>
+</Tabs>
+
+***
+
 ## Optional
 
 [Optional](/api/classes/Optional.md) is a wrapper type that can represent a value that may or may not be present. It's similar to the concept of `null` in JavaScript.
