@@ -10,7 +10,7 @@ describe("Text", () => {
     expect(text.read(reader)).toBe("Hello, World!");
   });
 
-  it("should write a string larger than initial buffer sizde", () => {
+  it("should write a string larger than initial buffer size", () => {
     const writer = new ByteStreamWriter(4, { maxByteLength: 64 });
 
     text.write(writer, "Hello, World!");

@@ -148,6 +148,94 @@ The constructor takes a single argument, which is the type of elements in the li
 
 ***
 
+## Dictionary
+
+[Dictionary](/api/classes/Dictionary.md) is a collection of key-value pairs. It's a synonym for a JavaScript Map.
+
+It is used to store associative data where each value is accessed by a unique key. A dictionary can contain any number of key-value pairs of any type.
+
+The constructor takes three arguments:
+- `keySchema`: The schema for the keys in the dictionary
+- `valueSchema`: The schema for the values in the dictionary  
+- `sizeSchema`: The schema for the size of the dictionary (optional, defaults to `u32`)
+
+<Tabs>
+  <TabItem value="simple" label="Simple" default>
+    ```typescript
+    import { Dictionary, u8, f64 } from '@evenstar/byteform';
+
+    /**
+     * Define a schema for a dictionary with number keys and float values.
+     * Similar to JavaScript Map: new Map([[1, 1.5], [2, 2.4], [3, 3.6]])
+     */
+    const schema = new Dictionary(u8, f64);
+    ```
+  </TabItem>
+  <TabItem value="mixed" label="Mixed Types">
+    ```typescript
+    import { Dictionary, text, f64, u8 } from '@evenstar/byteform';
+
+    /**
+     * Define a schema for a dictionary with string keys and float values.
+     * Similar to JavaScript Map: new Map([['x', 1.5], ['y', 2.4], ['z', 3.6]])
+     */
+    const schema = new Dictionary(text, f64);
+
+    /**
+     * Define a schema for a dictionary with number keys and string values.
+     * Similar to JavaScript Map: new Map([[1, 'one'], [2, 'two'], [3, 'three']])
+     */
+    const stringValues = new Dictionary(u8, text);
+    ```
+  </TabItem>
+  <TabItem value="custom-size" label="Custom Size Schema">
+    ```typescript
+    import { Dictionary, u8, f64, u16 } from '@evenstar/byteform';
+
+    /**
+     * Define a schema for a dictionary with custom size encoding.
+     * Uses u16 for size instead of the default u32, useful for smaller dictionaries.
+     */
+    const schema = new Dictionary(u8, f64, u16);
+    ```
+  </TabItem>
+  <TabItem value="nested" label="Nested">
+    ```typescript
+    import { Dictionary, text, Struct, u8, f64 } from '@evenstar/byteform';
+
+    /**
+     * Define a schema for a dictionary with string keys and struct values.
+     * Similar to JavaScript Map: new Map([
+     *   ['player1', { id: 1, score: 100.5 }],
+     *   ['player2', { id: 2, score: 85.2 }]
+     * ])
+     */
+    const playerSchema = new Struct({
+      id: u8,
+      score: f64,
+    });
+
+    const schema = new Dictionary(text, playerSchema);
+    ```
+  </TabItem>
+  <TabItem value="typescript" label="With TypeScript">
+    ```typescript
+    import { Dictionary, text, f64 } from '@evenstar/byteform';
+
+    // Define a TypeScript type
+    type Config = Map<string, number>;
+
+    /**
+     * Validate the schema against the TypeScript type.
+     * The schema will encode/decode Map<string, number> data.
+     */
+    const schema = new Dictionary<Config>(text, f64);
+    ```
+  </TabItem>
+</Tabs>
+
+***
+
 ## Optional
 
 [Optional](/api/classes/Optional.md) is a wrapper type that can represent a value that may or may not be present. It's similar to the concept of `null` in JavaScript.
@@ -210,9 +298,29 @@ The constructor takes a single argument, which is the type of elements in the li
 
 ***
 
-## Text Types
+## Str
 
-Byteform provides a [text](api/variables/text.md) schema type to represent text data. It's a synonym for a JavaScript string.
+[Str](/api/classes/Str.md) is a type that represents a fixed-length string. It's a synonym for a JavaScript string.
+
+The constructor takes a single argument, which is the byte length of the string. There are a few examples of how to define a fixed-length string:
+
+```typescript
+import { Str } from '@evenstar/byteform';
+
+const schema = new Str(5); // Fixed-length string of 5 bytes
+
+schema.write(writer, "Hello, World!"); // Writes -> Hello (5 bytes)
+schema.read(reader); // Reads -> Hello
+
+schema.write(writer, "Hi"); // Writes -> Hi\0 (2 bytes + null terminator)
+schema.read(reader); // Reads -> Hi
+```
+
+***
+
+## Text
+
+Byteform provides a [text](api/variables/text.md) schema type to represent a variable-length string. It's a synonym for a JavaScript string.
 
 ```typescript
 import { text } from '@evenstar/byteform';

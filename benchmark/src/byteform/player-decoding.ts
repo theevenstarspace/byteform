@@ -1,7 +1,7 @@
 import benny from 'benny';
 import msgpack from 'msgpack-lite';
 import { BSON } from 'bson';
-import { ByteStreamReader, ByteStreamWriter, f32, List, Struct, text } from '@evenstar/byteform';
+import { ByteStreamReader, ByteStreamWriter, f32, List, Str, Struct, type InferSchemaType } from '@evenstar/byteform';
 import { cleanup, getOptions } from '../utils';
 import type { Summary } from 'benny/lib/internal/common-types';
 import { encodePlayerFlatbuffer } from './flatbuffers/encode';
@@ -10,6 +10,77 @@ import { decodePlayerFlatbuffer } from './flatbuffers/decode';
 export const PlayerDecoding = (): Promise<Summary> => benny.suite(
   'Player decoding',
 
+  benny.add('Byteform raw', () => {
+    /** CREATE SCHEMAS **/
+    const vec3 = new Struct({ x: f32, y: f32, z: f32 });
+
+    const bullet = new Struct({ position: vec3, velocity: vec3 });
+
+    const player = new Struct({
+      name: new Str(16),
+      position: vec3,
+      rotation: f32,
+      bullets: new List(bullet),
+    });
+
+    type Player = InferSchemaType<typeof player>;
+
+    /** CREATE ENCODER AND ENCODE PLAYER **/
+    const encoder = new ByteStreamWriter(128);
+
+    encoder.writeSchema(player, {
+      name: 'Player',
+      position: { x: 1, y: 2, z: 3 },
+      rotation: 0,
+      bullets: [
+        { position: { x: 1, y: 2, z: 3 }, velocity: { x: 1, y: 2, z: 3 } },
+        { position: { x: 1, y: 2, z: 3 }, velocity: { x: 1, y: 2, z: 3 } },
+      ],
+    });
+
+    /** GET ENCODED DATA **/
+    const buffer = encoder.commit();
+
+    /** CYCLE FUNCTION **/
+    return (): void => {
+      // Create a decoder from the encoded data
+      const decoder = new ByteStreamReader(buffer);
+
+      // Decode the player object
+
+      const player = {} as Player;
+      player.bullets = [];
+
+      player.name = decoder.readString(16); // Read name
+
+      player.position = {
+        x: decoder.readFloat32(), // X Position
+        y: decoder.readFloat32(), // Y Position
+        z: decoder.readFloat32(), // Z Position
+      };
+
+      player.rotation = decoder.readFloat32(); // Rotation
+
+      const bulletCount = decoder.readUint32(); // Read bullet count
+      for (let i = 0; i < bulletCount; i++) {
+        const bullet = {} as Player["bullets"][number];
+        bullet.position = {
+          x: decoder.readFloat32(), // X Position
+          y: decoder.readFloat32(), // Y Position
+          z: decoder.readFloat32(), // Z Position
+        };
+
+        bullet.velocity = {
+          x: decoder.readFloat32(), // X Velocity
+          y: decoder.readFloat32(), // Y Velocity
+          z: decoder.readFloat32(), // Z Velocity
+        };
+
+        player.bullets.push(bullet);
+      }
+    };
+  }),
+
   benny.add('Byteform', () => {
     /** CREATE SCHEMAS **/
     const vec3 = new Struct({ x: f32, y: f32, z: f32 });
@@ -17,7 +88,7 @@ export const PlayerDecoding = (): Promise<Summary> => benny.suite(
     const bullet = new Struct({ position: vec3, velocity: vec3 });
 
     const player = new Struct({
-      name: text,
+      name: new Str(16),
       position: vec3,
       rotation: f32,
       bullets: new List(bullet),

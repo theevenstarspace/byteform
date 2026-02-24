@@ -3,6 +3,11 @@ import { ByteStream } from "./byte-stream";
 import type { InferSchemaType, SchemaLike } from "./types/schema-like";
 
 /**
+ * TextDecoder instance to decode strings from bytes.
+ */
+const Decoder = new TextDecoder();
+
+/**
  * A class that provides methods to read data from a buffer.
  * @group Streams
  */
@@ -167,6 +172,26 @@ export class ByteStreamReader extends ByteStream {
    */
   public readTypedArray<T extends TypedArray>(TypedArray: TypedArrayConstructor<T>, elements: number): T {
     return new TypedArray(this.readArrayBuffer(TypedArray.BYTES_PER_ELEMENT * elements));
+  }
+
+  /**
+   * Reads a string from the buffer.
+   * @param byteLength - The number of bytes to read
+   * @returns The read string
+   * @throws {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/RangeError | RangeError} if the buffer is out of bounds
+   */
+  public readString(byteLength: number): string {
+    // Find termination point
+    const start = this._offset;
+    const end = this._offset + byteLength;
+    while (this._offset < end && this._u8[this._offset] !== 0) {
+      this._offset++;
+    }
+
+    const buffer = new Uint8Array(this._buffer, start, this._offset - start);
+    this.seek(start + byteLength); // Move to the end of the allocated space
+
+    return Decoder.decode(buffer);
   }
 
   /**

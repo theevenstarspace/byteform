@@ -1,19 +1,49 @@
 {
   "name": "String Decoding",
-  "date": "2025-01-28T18:56:20.482Z",
+  "date": "2025-08-30T14:02:00.133Z",
   "version": "1.0.1",
   "results": [
     {
       "name": "TextDecoder",
-      "ops": 14245088,
-      "margin": 0.81,
+      "ops": 17183943,
+      "margin": 0.91,
       "percentSlower": 0
     },
     {
       "name": "Manual utf8",
-      "ops": 4657845,
-      "margin": 0.41,
-      "percentSlower": 67.3
+      "ops": 5498866,
+      "margin": 1.21,
+      "percentSlower": 68
+    },
+    {
+      "name": "Manual utf8 from array",
+      "ops": 7195963,
+      "margin": 0.57,
+      "percentSlower": 58.12
+    },
+    {
+      "name": "Manual from u32 char codes",
+      "ops": 990490,
+      "margin": 0.7,
+      "percentSlower": 94.24
+    },
+    {
+      "name": "Manual from u16 char codes",
+      "ops": 986307,
+      "margin": 0.61,
+      "percentSlower": 94.26
+    },
+    {
+      "name": "Manual from u32 char codes concat",
+      "ops": 4535936,
+      "margin": 0.94,
+      "percentSlower": 73.6
+    },
+    {
+      "name": "Manual from u16 char codes concat",
+      "ops": 4280725,
+      "margin": 1.4,
+      "percentSlower": 75.09
     }
   ],
   "fastest": {
@@ -21,7 +51,7 @@
     "index": 0
   },
   "slowest": {
-    "name": "Manual utf8",
-    "index": 1
+    "name": "Manual from u16 char codes",
+    "index": 4
   }
 }
