@@ -9,3 +9,4 @@ export * from "./optional";
 export * from "./typedArray";
 export * from "./arrayBuffer";
 export * from "./dictionary";
+export * from "./varint";
