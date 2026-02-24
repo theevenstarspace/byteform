@@ -3,7 +3,6 @@
     "allowJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "downlevelIteration": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
     "noEmit": true,
