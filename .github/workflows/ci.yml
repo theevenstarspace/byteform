@@ -13,18 +13,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4 # Check out the repository code
+      # Check out the repository code
+      - uses: actions/checkout@v4 
       - name: Enable Corepack
         run: corepack enable
 
+      # Set up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22.x' # Use the latest LTS version of Node.js
-          cache: 'yarn'         # Cache Yarn dependencies
+          cache: 'yarn'        # Cache Yarn dependencies
 
+      # Install project dependencies
       - name: Install dependencies
         run: yarn install
 
+      # Run tests to ensure code quality
+      - name: Run tests
+        run: yarn test
+
+      # Generate code
       - name: Build project
         run: yarn build
